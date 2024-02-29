@@ -13,14 +13,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class Controller {
-    @RequestMapping("/sunInfo")
-    public String getSunInfo(@RequestParam(value = "lat", defaultValue = "null") String lat,
-                             @RequestParam(value = "lng", defaultValue = "null") String lng,
-                             @RequestParam(value = "date", defaultValue = "null") String date,
-                             @RequestParam(value = "formatted", defaultValue = "null") String formatted){
+    @RequestMapping("/info")
+    public String getSunInfo(@RequestParam(value = "number", defaultValue = "random") String number,
+                             @RequestParam(value = "type", defaultValue = "trivia") String type){
         String url;
         try {
-            url = UrlChecker.checkUrl(lat, lng, date, formatted);
+            url = UrlChecker.checkUrl(number, type);
         }
         catch (WrongFormatException w){
             return w.getExceptionMessage();

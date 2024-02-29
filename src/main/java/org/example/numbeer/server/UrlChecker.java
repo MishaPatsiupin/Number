@@ -5,28 +5,16 @@ import java.util.Objects;
 
 public class UrlChecker {
     private UrlChecker(){}
-    public static String checkUrl(String lat, String lng, String date, String formatted) throws WrongFormatException{
-        if(Objects.equals(lat, "null") || Objects.equals(lng, "null")){
-            throw new WrongFormatException("Wrong format! Variables \"lat\" and \"lng\" are obligatory!");
+    //http://numbersapi.com/random/year?json
+    public static String checkUrl(String number, String type) throws WrongFormatException{
+        if(Objects.equals(number, "null") || Objects.equals(type, "null")){
+            throw new WrongFormatException("Wrong format! Variables \"number\" and \"type\" are obligatory!");
         }
 
-        String url = "https://api.sunrise-sunset.org/json";
+        String url = "http://numbersapi.com/";
         String newUrl;
-        final String latS = "?lat=";
-        final String lngS = "&lng=";
 
-        if(!Objects.equals(date, "null")&&!Objects.equals(formatted, "null")){
-            newUrl = url + latS + lat + lngS + lng + "&date=" + date + "&formatted=" + formatted;
-        }
-        else if(!Objects.equals(date, "null")&&Objects.equals(formatted, "null")){
-            newUrl = url + latS + lat + lngS + lng + "&date=" + date;
-        }
-        else if(Objects.equals(date, "null")&&!Objects.equals(formatted, "null")){
-            newUrl = url + latS + lat + lngS + lng + "&formatted=" + formatted;
-        }
-        else{
-            newUrl = url + latS + lat + lngS + lng;
-        }
+            newUrl = url + number + type + "?json";
 
         return newUrl;
     }

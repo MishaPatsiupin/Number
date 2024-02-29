@@ -7,6 +7,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class NumBeerApplication {
 
     public static void main(String[] args) {
+
         SpringApplication.run(NumBeerApplication.class, args);
     }
 
