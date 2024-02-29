@@ -14,8 +14,7 @@ public class UrlChecker {
         String url = "http://numbersapi.com/";
         String newUrl;
 
-            newUrl = url + number + type + "?json";
-
+            newUrl = url + number + "/" + type + "?json";
         return newUrl;
     }
 }

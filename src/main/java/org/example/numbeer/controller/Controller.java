@@ -14,11 +14,13 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class Controller {
     @RequestMapping("/info")
-    public String getSunInfo(@RequestParam(value = "number", defaultValue = "random") String number,
-                             @RequestParam(value = "type", defaultValue = "trivia") String type){
+    public String getInfo(@RequestParam(value = "number", defaultValue = "random") String number,
+                          @RequestParam(value = "type", defaultValue = "trivia") String type){
+
         String url;
         try {
             url = UrlChecker.checkUrl(number, type);
+
         }
         catch (WrongFormatException w){
             return w.getExceptionMessage();
@@ -28,7 +30,7 @@ public class Controller {
 
     @RequestMapping("/**")
     public ResponseEntity<String> defaultMethod() {
-        return new ResponseEntity<>("Please specify a valid path", HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>("Please specify a valid path. For exemple, http://localhost:8080/info?number=5&type=math", HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(Exception.class)
