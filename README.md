@@ -1,4 +1,4 @@
-## NUMBERSAPI
+## NUMBERSAPI [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=MishaPatsiupin_NumBeer&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=MishaPatsiupin_NumBeer)
 ### Let your statistics tell tales and dates come to life
 #### A web service for finding out the fact about numbers
 ### URL STRUCTURE
