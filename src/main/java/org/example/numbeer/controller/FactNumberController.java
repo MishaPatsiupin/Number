@@ -26,7 +26,7 @@ public class FactNumberController {
             @Pattern(regexp = "\\d+")
             @NumberFormat(style = NumberFormat.Style.NUMBER) String number,
             @RequestParam(value = "type", defaultValue = "trivia")
-            @Pattern(regexp = "^[a-z]+$") String type) {
+            @Pattern(regexp = "^(year|math|trivia)$") String type) {
 
 
         String url;
