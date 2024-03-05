@@ -9,8 +9,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-public class Controller {
-    @RequestMapping(value = "/info", method = {RequestMethod.GET})
+public class FactNumberController {
+
+   @GetMapping(value = "/info")
     public String getInfo(@RequestParam(value = "number", defaultValue = "random") String number,
                           @RequestParam(value = "type", defaultValue = "trivia") String type){
 
@@ -24,7 +25,8 @@ public class Controller {
         return ResponseGetter.gettingFinalResponse(url);
     }
 
-    @RequestMapping(value = "/**", method = {RequestMethod.GET})
+
+   @GetMapping(value = "/**")
     public ResponseEntity<String> defaultMethod() {
         return new ResponseEntity<>("Please specify a valid path. For exemple, http://localhost:8080/info?number=5&type=math", HttpStatus.BAD_REQUEST);
     }
