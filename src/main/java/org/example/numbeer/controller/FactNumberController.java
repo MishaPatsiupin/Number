@@ -28,7 +28,6 @@ public class FactNumberController {
             @RequestParam(value = "type", defaultValue = "trivia")
             @Pattern(regexp = "^(year|math|trivia)$") String type) {
 
-
         String url;
         url = UrlChecker.createNewUrl(number, type);
         return FactNumberResponseGetter.gettingFinalResponse(url);
