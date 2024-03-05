@@ -9,8 +9,8 @@ public class JsonRemaster {
 
     public static String gettingJsonKeyValues(String jsonResponse) {
         Gson gson = new Gson();
-        InfoInJson info;
-        info = gson.fromJson(jsonResponse, InfoInJson.class);
+        InfoInResponse info;
+        info = gson.fromJson(jsonResponse, InfoInResponse.class);
 
         return info.text;
     }

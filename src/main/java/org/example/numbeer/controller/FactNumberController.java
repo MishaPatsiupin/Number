@@ -2,7 +2,7 @@ package org.example.numbeer.controller;
 
 import jakarta.validation.constraints.Pattern;
 
-import org.example.numbeer.response.ResponseGetter;
+import org.example.numbeer.response.FactNumberResponseGetter;
 import org.example.numbeer.servise.UrlChecker;
 
 import org.springframework.format.annotation.NumberFormat;
@@ -31,7 +31,7 @@ public class FactNumberController {
 
         String url;
         url = UrlChecker.createNewUrl(number, type);
-        return ResponseGetter.gettingFinalResponse(url);
+        return FactNumberResponseGetter.gettingFinalResponse(url);
     }
 
 

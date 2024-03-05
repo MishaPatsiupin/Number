@@ -1,6 +1,6 @@
 package org.example.numbeer.servise;
 
-public class InfoInJson {
+public class InfoInResponse {
     String text;
     String number;
     String found;
