@@ -1,4 +1,4 @@
-package org.example.numbeer.dao;
+package org.example.numbeer.response;
 
 import org.example.numbeer.server.JsonRemaster;
 import org.springframework.http.ResponseEntity;
