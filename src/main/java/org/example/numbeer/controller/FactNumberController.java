@@ -14,33 +14,37 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.io.IOException;
 
 @RestController
 @Validated
 public class FactNumberController {
 
-
     @GetMapping(value = "/info")
     public String getInfo(
             @RequestParam(value = "number", defaultValue = "random")
-            @Pattern(regexp = "\\d+")
+            @Pattern(regexp = "\\d+|^(random)")
             @NumberFormat(style = NumberFormat.Style.NUMBER) String number,
             @RequestParam(value = "type", defaultValue = "trivia")
             @Pattern(regexp = "^(year|math|trivia)$") String type) {
 
         String url;
-        url = UrlChecker.createNewUrl(number, type);
+        try {
+            url = UrlChecker.createNewUrl(number, type);
+        } catch (IOException e) {
+            return "Error occurred while creating the URL: " + e.getMessage();
+        }
+
         return FactNumberResponseGetter.gettingFinalResponse(url);
     }
 
-
     @GetMapping(value = "/**")
     public ResponseEntity<String> defaultMethod() {
-        return new ResponseEntity<>("Please specify a valid path. For exemple, http://localhost:8081/info?number=5&type=math", HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>("Please specify a valid path. For example, http://localhost:8081/info?number=5&type=math", HttpStatus.BAD_REQUEST);
     }
 
-    @ExceptionHandler(Exception.class)
-    public ResponseEntity<Object> handleException() {
+    @ExceptionHandler(IOException.class)
+    public ResponseEntity<Object> handleIOException() {
         return new ResponseEntity<>("STATUS: 500. Internal Server Error", HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }
