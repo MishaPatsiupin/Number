@@ -15,7 +15,6 @@ The parameters are as follows:
 - `NUMBER`: This parameter specifies the number you want to explore. It can be:
   - An integer: Simply enter the desired integer value to obtain information about that number.
   - The keyword `random`: If you use the keyword `random`, the API will attempt to provide a random available fact.
-  - A day of the year: If the `TYPE` is set to `date`, you can specify a day of the year in the format `month/day` (e.g., `2/29`, `1/09`, `04/1`).
 
 ### Examples
 
