@@ -1,9 +1,9 @@
 package org.example.numbeer.controller;
+
 import jakarta.validation.constraints.Pattern;
 
 import org.example.numbeer.response.ResponseGetter;
 import org.example.numbeer.servise.UrlChecker;
-import org.example.numbeer.servise.WrongFormatException;
 
 import org.springframework.format.annotation.NumberFormat;
 import org.springframework.http.HttpStatus;
@@ -15,8 +15,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 
-
-
 @RestController
 @Validated
 public class FactNumberController {
@@ -25,19 +23,14 @@ public class FactNumberController {
     @GetMapping(value = "/info")
     public String getInfo(
             @RequestParam(value = "number", defaultValue = "random")
-            @Pattern(regexp="\\d+")
+            @Pattern(regexp = "\\d+")
             @NumberFormat(style = NumberFormat.Style.NUMBER) String number,
             @RequestParam(value = "type", defaultValue = "trivia")
             @Pattern(regexp = "^[a-z]+$") String type) {
 
 
-
         String url;
-        try {
-            url = UrlChecker.createNewUrl(number, type);
-        } catch (WrongFormatException w) {
-            return w.getExceptionMessage();
-        }
+        url = UrlChecker.createNewUrl(number, type);
         return ResponseGetter.gettingFinalResponse(url);
     }
 
