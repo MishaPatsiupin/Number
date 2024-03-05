@@ -6,7 +6,7 @@ import java.util.Objects;
 public class UrlChecker {
     private UrlChecker(){}
     //http://numbersapi.com/random/year?json
-    public static String formatingUrl(String number, String type) throws WrongFormatException{
+    public static String createNewUrl(String number, String type) throws WrongFormatException{
         if(Objects.equals(number, "null") || Objects.equals(type, "null")){
             throw new WrongFormatException("Wrong format! Variables \"number\" and \"type\" are obligatory!");
         }

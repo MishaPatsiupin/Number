@@ -16,7 +16,7 @@ public class Controller {
 
         String url;
         try {
-            url = UrlChecker.formatingUrl(number, type);
+            url = UrlChecker.createNewUrl(number, type);
         }
         catch (WrongFormatException w){
             return w.getExceptionMessage();
