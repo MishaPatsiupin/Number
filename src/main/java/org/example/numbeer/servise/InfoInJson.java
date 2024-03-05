@@ -1,4 +1,4 @@
-package org.example.numbeer.server;
+package org.example.numbeer.servise;
 
 public class InfoInJson {
     String text;

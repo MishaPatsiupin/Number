@@ -1,4 +1,4 @@
-package org.example.numbeer.server;
+package org.example.numbeer.servise;
 
 public class WrongFormatException extends Exception{
     private final String exceptionMessage;
