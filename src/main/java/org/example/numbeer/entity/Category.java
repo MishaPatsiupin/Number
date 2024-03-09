@@ -5,11 +5,12 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "category", schema = "public", catalog = "numbeer")
-public class CategoryEntity {
+public class Category {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     @Column(name = "id")
     private long id;
+
     @Basic
     @Column(name = "name")
     private String name;
@@ -34,7 +35,7 @@ public class CategoryEntity {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        CategoryEntity that = (CategoryEntity) o;
+        Category that = (Category) o;
         return id == that.id && Objects.equals(name, that.name);
     }
 

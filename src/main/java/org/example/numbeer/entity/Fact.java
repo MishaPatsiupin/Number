@@ -5,14 +5,16 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "fact", schema = "public", catalog = "numbeer")
-public class FactEntity {
+public class Fact {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     @Column(name = "id")
     private long id;
-    @Basic
-    @Column(name = "number_id")
-    private long numberId;
+
+    @ManyToOne
+    @JoinColumn(name = "number_id")
+    private Number number;
+
     @Basic
     @Column(name = "description")
     private String description;
@@ -25,12 +27,12 @@ public class FactEntity {
         this.id = id;
     }
 
-    public long getNumberId() {
-        return numberId;
+    public Number getNumber() {
+        return number;
     }
 
-    public void setNumberId(long numberId) {
-        this.numberId = numberId;
+    public void setNumber(Number number) {
+        this.number = number;
     }
 
     public String getDescription() {
@@ -45,12 +47,12 @@ public class FactEntity {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        FactEntity that = (FactEntity) o;
-        return id == that.id && numberId == that.numberId && Objects.equals(description, that.description);
+        Fact that = (Fact) o;
+        return id == that.id && Objects.equals(number, that.number) && Objects.equals(description, that.description);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, numberId, description);
+        return Objects.hash(id, number, description);
     }
 }
