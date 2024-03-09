@@ -12,7 +12,7 @@ public class Fact {
     private long id;
 
     @ManyToOne
-    @JoinColumn(name = "number_id")
+    @JoinColumn(name = "number_id", referencedColumnName = "id")
     private Number number;
 
     @Basic

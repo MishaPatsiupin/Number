@@ -12,11 +12,11 @@ public class FactCategory {
     private long id;
 
     @ManyToOne
-    @JoinColumn(name = "category_id")
+    @JoinColumn(name = "category_id", referencedColumnName = "id")
     private Category category;
 
     @ManyToOne
-    @JoinColumn(name = "fact_id")
+    @JoinColumn(name = "fact_id", referencedColumnName = "id")
     private Fact fact;
 
     public long getId() {

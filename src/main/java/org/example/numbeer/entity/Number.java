@@ -1,7 +1,6 @@
 package org.example.numbeer.entity;
 
 import javax.persistence.*;
-import java.util.List;
 import java.util.Objects;
 
 @Entity
@@ -15,9 +14,6 @@ public class Number {
     @Basic
     @Column(name = "number_data")
     private long numberData;
-
-    @OneToMany(mappedBy = "number")
-    private List<Fact> facts;
 
     public long getId() {
         return id;
@@ -35,13 +31,6 @@ public class Number {
         this.numberData = numberData;
     }
 
-    public List<Fact> getFacts() {
-        return facts;
-    }
-
-    public void setFacts(List<Fact> facts) {
-        this.facts = facts;
-    }
 
     @Override
     public boolean equals(Object o) {
