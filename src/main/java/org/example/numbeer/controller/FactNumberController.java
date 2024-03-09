@@ -21,12 +21,11 @@ import java.io.IOException;
 public class FactNumberController {
 
     @GetMapping(value = "/info")
-    public String getInfo(
-            @RequestParam(value = "number", defaultValue = "random")
-            @Pattern(regexp = "\\d+|^(random)")
-            @NumberFormat(style = NumberFormat.Style.NUMBER) String number,
-            @RequestParam(value = "type", defaultValue = "trivia")
-            @Pattern(regexp = "^(year|math|trivia)$") String type) {
+    public String getInfo(@RequestParam(value = "number", defaultValue = "random")
+                          @Pattern(regexp = "\\d+|^(random)")
+                          @NumberFormat(style = NumberFormat.Style.NUMBER) String number,
+                          @RequestParam(value = "type", defaultValue = "trivia")
+                          @Pattern(regexp = "^(year|math|trivia)$") String type) {
 
         String url;
         try {

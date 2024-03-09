@@ -10,7 +10,7 @@ public class FactNumberResponseGetter {
 
     public static String gettingFinalResponse(String url) {
         RestTemplate restTemplate = new RestTemplate();
-        ResponseEntity<String> response = restTemplate.getForEntity(url, String.class);
+        ResponseEntity<String> response = restTemplate.getForEntity(url, String.class); //Получает ResponseEntity (то есть статус, заголовки и тело) через GET.
 
         String jsonResponse = response.getBody();
         return JsonRemaster.gettingJsonKeyValues(jsonResponse);
