@@ -2,6 +2,7 @@ package org.example.numbeer.controller;
 
 import jakarta.validation.constraints.Pattern;
 
+import org.example.numbeer.dao.NumberDAO;
 import org.example.numbeer.response.FactNumberResponseGetter;
 import org.example.numbeer.servise.UrlChecker;
 
@@ -35,6 +36,16 @@ public class FactNumberController {
         }
 
         return FactNumberResponseGetter.gettingFinalResponse(url);
+    }
+
+    @GetMapping(value = "/add/number")
+    public ResponseEntity<String> newNumber(@RequestParam(value = "data", defaultValue = "1001")
+                            @Pattern(regexp = "\\d+") String number) {
+        NumberDAO numberDAO = new NumberDAO();
+        numberDAO.createNumber(Long.parseLong(number));
+
+
+        return new ResponseEntity<>("Add number ", HttpStatus.OK);
     }
 
     @GetMapping(value = "/**")
