@@ -1,12 +1,12 @@
 package com.example.demo.service;
 
-import java.util.Optional;
+import com.example.demo.entity.NumberEntity;
 
 public interface NumberService {
-    Iterable<Number> findAllProducts(long numberData);
-    Number createProduct(long numberData);
+    NumberEntity findAllProducts(long numberData);
+    NumberEntity createProduct(long numberData);
 
-    Optional<Number> findProduct(long numberData);
+    NumberEntity findProduct(long numberData);
 
     void updateProduct(long id, long numberData);
 
