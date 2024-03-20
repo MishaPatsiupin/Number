@@ -1,8 +1,10 @@
 package com.example.demo.entity;
 
 import jakarta.persistence.*;
+import lombok.Data;
 
 @Entity
+@Data
 @Table(name = "fact")
 public class FactEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)

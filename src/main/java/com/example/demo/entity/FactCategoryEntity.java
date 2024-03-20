@@ -1,8 +1,10 @@
 package com.example.demo.entity;
 
 import jakarta.persistence.*;
+import lombok.Data;
 
 @Entity
+@Data
 @Table(name = "fact_category")
 public class FactCategoryEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)

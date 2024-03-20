@@ -1,8 +1,10 @@
-package com.example.demo.service;
+package com.example.demo.service.defaultService;
 
 import com.example.demo.entity.NumberEntity;
+import com.example.demo.service.NumberService;
 import lombok.RequiredArgsConstructor;
 import com.example.demo.repository.NumberRepository;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -13,12 +15,28 @@ public class DefaultNumberService implements NumberService {
     private final NumberRepository numberRepository;
 
     @Override
-    public NumberEntity findAllProducts(long numberData) {
-        return numberRepository.findByNumberData(numberData);
+    public ResponseEntity<String> addNumber(String number) {
+        try {
+            long numberData = Long.parseLong(number);
+            NumberEntity existingNumber = findNumber(numberData);
+            if (existingNumber != null) {
+                return ResponseEntity.badRequest().body("Number already exists");
+            }
+
+            NumberEntity createdNumber = createNumber(numberData);
+            return ResponseEntity.ok("Number added successfully: " + createdNumber.getNumberData());
+        } catch (NumberFormatException e) {
+            return ResponseEntity.badRequest().body("Invalid number format");
+        }
     }
 
     @Override
-    public NumberEntity createProduct(long numberData) {
+    public long findIdByNumber(long id) {
+        return numberRepository.findByNumberData(id).getId();
+    }
+
+    @Override
+    public NumberEntity createNumber(long numberData) {
         Optional<NumberEntity> existingNumber = Optional.ofNullable(numberRepository.findByNumberData(numberData));
 
         if (existingNumber.isPresent()) {
@@ -31,12 +49,13 @@ public class DefaultNumberService implements NumberService {
     }
 
     @Override
-    public NumberEntity findProduct(long numberData) {
+    public NumberEntity findNumber(long numberData) {
+
         return numberRepository.findByNumberData(numberData);
     }
 
     @Override
-    public void updateProduct(long id, long numberData) {
+    public void updateNumber(long id, long numberData) {
         Optional<NumberEntity> existingNumber = numberRepository.findById(id);
         existingNumber.ifPresent(numberEntity -> {
             numberEntity.setNumberData(numberData);
@@ -45,7 +64,7 @@ public class DefaultNumberService implements NumberService {
     }
 
     @Override
-    public void deleteProduct(long id) {
+    public void deleteNumber(long id) {
         numberRepository.deleteById(id);
     }
 }
