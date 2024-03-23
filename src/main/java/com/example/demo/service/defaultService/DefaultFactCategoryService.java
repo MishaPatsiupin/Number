@@ -6,11 +6,14 @@ import com.example.demo.entity.FactEntity;
 import com.example.demo.repository.CategoryRepository;
 import com.example.demo.repository.FactCategoryRepository;
 import com.example.demo.repository.FactRepository;
+import com.example.demo.repository.NumberRepository;
 import com.example.demo.service.FactCategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class DefaultFactCategoryService implements FactCategoryService {
@@ -18,17 +21,20 @@ public class DefaultFactCategoryService implements FactCategoryService {
     private final FactCategoryRepository factCategoryRepository;
     private final CategoryRepository categoryRepository;
     private final FactRepository factRepository;
+    private final NumberRepository numberRepository;
 
     private CategoryEntity getCategoryEntityById(long catId) {
         // Логика получения CategoryEntity по идентификатору
         Optional<CategoryEntity> categoryOptional = categoryRepository.findById(catId);
         return categoryOptional.orElse(null);
     }
+
     private FactEntity getFactEntityById(long facId) {
         // Логика получения FactEntity по идентификатору
         Optional<FactEntity> factOptional = factRepository.findById(facId);
         return factOptional.orElse(null);
     }
+
     private FactCategoryEntity getFactCategoryEntityById(long id) {
         // Логика получения FactCategoryEntity по идентификатору
         Optional<FactCategoryEntity> factCategoryOptional = factCategoryRepository.findById(id);
@@ -36,10 +42,11 @@ public class DefaultFactCategoryService implements FactCategoryService {
     }
 
     @Autowired
-    public DefaultFactCategoryService(FactCategoryRepository factCategoryRepository, CategoryRepository categoryRepository, FactRepository factRepository) {
+    public DefaultFactCategoryService(FactCategoryRepository factCategoryRepository, CategoryRepository categoryRepository, FactRepository factRepository, NumberRepository numberRepository) {
         this.factCategoryRepository = factCategoryRepository;
         this.categoryRepository = categoryRepository;
         this.factRepository = factRepository;
+        this.numberRepository = numberRepository;
     }
 
     @Override
@@ -71,17 +78,63 @@ public class DefaultFactCategoryService implements FactCategoryService {
         }
     }
 
+    public ResponseEntity<List<String>> getFactCategoryByFactAndCategory(String numberS, String type) {
+        List<String> responseS = new ArrayList<>();
+        long number = 0;
 
-    @Override
-    public boolean ifCategory(long facId, long catId) {
-        long categoryId = factCategoryRepository.getCategoryByFactId(facId);
-        if (catId == categoryId) {
-            FactCategoryEntity factCategoryEntity = factCategoryRepository.findByFactId(facId);
-            if (factCategoryEntity != null) {
-                return Long.valueOf(factCategoryEntity.getCategory().getId()).equals(catId);
+        try {
+            if (numberS.equals("random")) {
+                Random random = new Random();
+                number = random.nextInt(1001) - 500;
+            } else {
+                number = Long.parseLong(numberS);
             }
+
+            long numberId = numberRepository.findByNumberData(number).getId();
+
+            List<FactCategoryEntity> allFactByNumber;
+            allFactByNumber = factCategoryRepository.findFactCategoriesByFactId(numberId);
+
+
+            for (int i = 0; i < allFactByNumber.size(); i++) {
+                if (allFactByNumber.get(i).getCategory().getId() == categoryRepository.findIdByName(type)) {
+                    responseS.add("Fact id:" + allFactByNumber.get(i).getFact().getId() + ", " + number + " " + allFactByNumber.get(i).getFact().getDescription());
+                }
+            }
+
+            if (responseS.isEmpty()) {
+                switch (type) {
+                    case "trivia":
+                        responseS.add(number + " is an uninteresting number.");
+                        break;
+                    case "math":
+                        responseS.add(number + " is a boring number.");
+                        break;
+                    case "year":
+                        responseS.add(number + " BC is the year that we do not know what happened.");
+                        break;
+                }
+            }
+
+            return ResponseEntity.ok(responseS);
+        } catch (NumberFormatException e) {
+            return ResponseEntity.badRequest().body(Collections.singletonList("Invalid number format."));
+        } catch (Exception e) {
+            if (responseS.isEmpty()) {
+                switch (type) {
+                    case "trivia":
+                        responseS.add(number + " is an uninteresting number.");
+                        break;
+                    case "math":
+                        responseS.add(number + " is a boring number.");
+                        break;
+                    case "year":
+                        responseS.add(number + " BC is the year that we do not know what happened.");
+                        break;
+                }
+            }
+            return ResponseEntity.ok(responseS);
         }
-        return false;
     }
 
 

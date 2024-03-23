@@ -15,9 +15,8 @@ public class DefaultNumberService implements NumberService {
     private final NumberRepository numberRepository;
 
     @Override
-    public ResponseEntity<String> addNumber(String number) {
+    public ResponseEntity<String> addNumber(long numberData) {
         try {
-            long numberData = Long.parseLong(number);
             NumberEntity existingNumber = findNumber(numberData);
             if (existingNumber != null) {
                 return ResponseEntity.badRequest().body("Number already exists");

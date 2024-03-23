@@ -16,6 +16,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.format.annotation.NumberFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -33,12 +34,12 @@ public class FactController {
     @PostMapping(value = "/number/add")
     public ResponseEntity<String> addNumber(@RequestParam(value = "number")
                                             @Pattern(regexp = "\\d+")
-                                            @NumberFormat(style = NumberFormat.Style.NUMBER) String number) {
+                                            @NumberFormat(style = NumberFormat.Style.NUMBER) long number) {
 
             return numberService.addNumber(number);
     }
 
-    @PostMapping(value = "/number/delete")
+    @DeleteMapping(value = "/number/delete")
     public ResponseEntity<String> delNumber(@RequestParam(value = "number")
                                             @Pattern(regexp = "\\d+")
                                             @NumberFormat(style = NumberFormat.Style.NUMBER) String number) {
@@ -60,15 +61,14 @@ public class FactController {
     @PostMapping(value = "/fact/add")
     public ResponseEntity<String> addFact(@RequestParam(value = "number")
                                           @Pattern(regexp = "\\d+")
-                                          @NumberFormat(style = NumberFormat.Style.NUMBER) String number,
+                                          @NumberFormat(style = NumberFormat.Style.NUMBER) long numberData,
                                           @RequestParam(value = "type", defaultValue = "trivia")
                                           @Pattern(regexp = "^(year|math|trivia)$") String type,
                                           @RequestParam(value = "fact", defaultValue = "it's a boring number")
                                           @Pattern(regexp = "[A-Za-z0-9\\s.,;!?\"'-]+") String newFact) {
         try {
-            long numberData = Long.parseLong(number);
 
-            numberService.addNumber(number);
+            numberService.addNumber(numberData);
             CategoryEntity existingCategory = categoryRepository.findCategoryByName(type);
             FactEntity createdFact = factService.createFact(numberData, newFact);
 
@@ -82,5 +82,6 @@ public class FactController {
             return ResponseEntity.badRequest().body("Invalid number format");
         }
     }
+
 
 }

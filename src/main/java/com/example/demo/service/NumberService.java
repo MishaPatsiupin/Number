@@ -4,7 +4,7 @@ import com.example.demo.entity.NumberEntity;
 import org.springframework.http.ResponseEntity;
 
 public interface NumberService {
-    ResponseEntity<String> addNumber(String number);
+    ResponseEntity<String> addNumber(long numberData);
     long findIdByNumber(long numberData);
     NumberEntity createNumber(long numberData);
 

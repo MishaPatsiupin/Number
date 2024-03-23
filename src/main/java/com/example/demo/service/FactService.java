@@ -8,4 +8,7 @@ public interface FactService {
     FactEntity createFact(long number, String description);
 
     FactEntity findFact (String description);
+
+    FactEntity getFactByNumberId(long number);
+
 }
