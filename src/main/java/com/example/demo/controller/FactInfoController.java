@@ -41,7 +41,7 @@ public class FactInfoController {
                                                 @Pattern(regexp = "^(year|math|trivia)$") String type) {
         long number = 0;
         if (numberS.equals("random")) {
-            number = 500 - random.nextInt(1001);
+            number = 500 - random.nextLong(1001);
         } else {
             number = Long.parseLong(numberS);
         }

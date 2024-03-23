@@ -89,7 +89,7 @@ public class DefaultFactCategoryService implements FactCategoryService {
 
         try {
             if (numberS.equals("random")) {
-                number = random.nextInt(1001) - 500;
+                number = random.nextLong(1001) - 500;
             } else {
                 number = Long.parseLong(numberS);
             }
