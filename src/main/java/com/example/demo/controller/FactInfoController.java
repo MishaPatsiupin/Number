@@ -16,9 +16,9 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 @Validated
 @RestController
@@ -31,34 +31,9 @@ public class FactInfoController {
     FactCategoryService factCategoryService;
     FactService factService;
     private final FactCategoryRepository factCategoryRepository;
-    private final Random random = new Random();
+    private final SecureRandom random = new SecureRandom ();
 
-    //    @GetMapping(value = "/info")
-//    public ResponseEntity<String> getInfo(@RequestParam(value = "number", defaultValue = "random")
-//                                          @Pattern(regexp = "\\d+|^(random)")
-//                                          @NumberFormat(style = NumberFormat.Style.NUMBER) long number,
-//                                          @RequestParam(value = "type", defaultValue = "trivia")
-//                                          @Pattern(regexp = "^(year|math|trivia)$") String type) {
-//        if (number == 0 && !type.equals("random")) {
-//            return ResponseEntity.badRequest().body("Invalid number value");
-//        }
-//
-//        if (type.equals("random")) {
-//            // Генерация случайного числа в диапазоне от -500 до 500
-//            Random random = new Random();
-//            number = random.nextInt(1001) - 500;
-//        }
-//
-//        // Поиск факта по number_id
-//        FactEntity fact = factService.getFactByNumberId(number);
-//        long catId = categoryRepository.findIdByName(type);
-//
-//        while (factCategoryService.ifCategory(fact.getId(), catId)){
-//
-//        }
-////
-//
-//    }
+
     @GetMapping(value = "/test")
     public ResponseEntity<List<String>> getTest(@RequestParam(value = "number", defaultValue = "random")
                                                 @Pattern(regexp = "\\d+|^(random)") String numberS,

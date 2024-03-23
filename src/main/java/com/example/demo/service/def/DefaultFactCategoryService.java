@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.security.SecureRandom;
 import java.util.*;
 
 @Service
@@ -23,6 +24,7 @@ public class DefaultFactCategoryService implements FactCategoryService {
     private final FactRepository factRepository;
     private final NumberRepository numberRepository;
     private final NumberService numberService;
+    private final SecureRandom random = new SecureRandom();
 
     private CategoryEntity getCategoryEntityById(long catId) {
         // Логика получения CategoryEntity по идентификатору
@@ -81,14 +83,12 @@ public class DefaultFactCategoryService implements FactCategoryService {
     }
 
 
-
     public ResponseEntity<List<String>> getFactCategoryByFactAndCategory(String numberS, String type) {
         List<String> responseS = new ArrayList<>();
         long number = 0;
 
         try {
             if (numberS.equals("random")) {
-                Random random = new Random();
                 number = random.nextInt(1001) - 500;
             } else {
                 number = Long.parseLong(numberS);
