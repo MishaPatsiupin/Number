@@ -32,11 +32,11 @@ dependencies {
 }
 
 sonar {
-  properties {
-    property "sonar.projectKey", "MishaPatsiupin_NumBeer"
-    property "sonar.organization", "bears"
-    property "sonar.host.url", "https://sonarcloud.io"
-  }
+    properties {
+        property "sonar.projectKey", "MishaPatsiupin_NumBeer"
+        property "sonar.organization", "bears"
+        property "sonar.host.url", "https://sonarcloud.io"
+    }
 }
 
 tasks.named('test') {

@@ -1,9 +1,6 @@
 package com.example.demo.controller;
 
-
-import com.example.demo.entity.CategoryEntity;
 import com.example.demo.entity.FactCategoryEntity;
-import com.example.demo.entity.FactEntity;
 import com.example.demo.repository.CategoryRepository;
 import com.example.demo.repository.FactCategoryRepository;
 import com.example.demo.repository.NumberRepository;
@@ -13,7 +10,6 @@ import com.example.demo.service.NumberService;
 import jakarta.validation.ConstraintViolationException;
 import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
-import org.springframework.format.annotation.NumberFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -35,6 +31,7 @@ public class FactInfoController {
     FactCategoryService factCategoryService;
     FactService factService;
     private final FactCategoryRepository factCategoryRepository;
+    private final Random random = new Random();
 
     //    @GetMapping(value = "/info")
 //    public ResponseEntity<String> getInfo(@RequestParam(value = "number", defaultValue = "random")
@@ -64,13 +61,12 @@ public class FactInfoController {
 //    }
     @GetMapping(value = "/test")
     public ResponseEntity<List<String>> getTest(@RequestParam(value = "number", defaultValue = "random")
-                                          @Pattern(regexp = "\\d+|^(random)") String numberS,
-                                          @RequestParam(value = "type", defaultValue = "trivia")
-                                          @Pattern(regexp = "^(year|math|trivia)$") String type) {
+                                                @Pattern(regexp = "\\d+|^(random)") String numberS,
+                                                @RequestParam(value = "type", defaultValue = "trivia")
+                                                @Pattern(regexp = "^(year|math|trivia)$") String type) {
         long number = 0;
         if (numberS.equals("random")) {
-            Random random = new Random();
-            number = random.nextInt(1001) - 500;
+            number = 500 - random.nextInt(1001);
         } else {
             number = Long.parseLong(numberS);
         }
@@ -81,10 +77,9 @@ public class FactInfoController {
         test = factCategoryRepository.findFactCategoriesByFactId(numberId);//+
 
 
-
         List<String> testS = new ArrayList<>();//а зачем оно надо, категорию давай
-        for (int i = 0; i < test.size(); i++){
-            if (test.get(i).getCategory().getId() == categoryRepository.findIdByName(type)){
+        for (int i = 0; i < test.size(); i++) {
+            if (test.get(i).getCategory().getId() == categoryRepository.findIdByName(type)) {
                 testS.add("Fact id:" + test.get(i).getFact().getId() + ", " + number + " " + test.get(i).getFact().getDescription());
             }
 

@@ -1,4 +1,4 @@
-package com.example.demo.service.defaultService;
+package com.example.demo.service.def;
 
 import com.example.demo.entity.CategoryEntity;
 import com.example.demo.entity.FactCategoryEntity;
@@ -8,8 +8,8 @@ import com.example.demo.repository.FactCategoryRepository;
 import com.example.demo.repository.FactRepository;
 import com.example.demo.repository.NumberRepository;
 import com.example.demo.service.FactCategoryService;
+import com.example.demo.service.NumberService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -22,6 +22,7 @@ public class DefaultFactCategoryService implements FactCategoryService {
     private final CategoryRepository categoryRepository;
     private final FactRepository factRepository;
     private final NumberRepository numberRepository;
+    private final NumberService numberService;
 
     private CategoryEntity getCategoryEntityById(long catId) {
         // Логика получения CategoryEntity по идентификатору
@@ -42,11 +43,12 @@ public class DefaultFactCategoryService implements FactCategoryService {
     }
 
     @Autowired
-    public DefaultFactCategoryService(FactCategoryRepository factCategoryRepository, CategoryRepository categoryRepository, FactRepository factRepository, NumberRepository numberRepository) {
+    public DefaultFactCategoryService(FactCategoryRepository factCategoryRepository, CategoryRepository categoryRepository, FactRepository factRepository, NumberRepository numberRepository, NumberService numberService) {
         this.factCategoryRepository = factCategoryRepository;
         this.categoryRepository = categoryRepository;
         this.factRepository = factRepository;
         this.numberRepository = numberRepository;
+        this.numberService = numberService;
     }
 
     @Override
@@ -78,6 +80,8 @@ public class DefaultFactCategoryService implements FactCategoryService {
         }
     }
 
+
+
     public ResponseEntity<List<String>> getFactCategoryByFactAndCategory(String numberS, String type) {
         List<String> responseS = new ArrayList<>();
         long number = 0;
@@ -95,25 +99,13 @@ public class DefaultFactCategoryService implements FactCategoryService {
             List<FactCategoryEntity> allFactByNumber;
             allFactByNumber = factCategoryRepository.findFactCategoriesByFactId(numberId);
 
-
             for (int i = 0; i < allFactByNumber.size(); i++) {
                 if (allFactByNumber.get(i).getCategory().getId() == categoryRepository.findIdByName(type)) {
                     responseS.add("Fact id:" + allFactByNumber.get(i).getFact().getId() + ", " + number + " " + allFactByNumber.get(i).getFact().getDescription());
                 }
             }
-
             if (responseS.isEmpty()) {
-                switch (type) {
-                    case "trivia":
-                        responseS.add(number + " is an uninteresting number.");
-                        break;
-                    case "math":
-                        responseS.add(number + " is a boring number.");
-                        break;
-                    case "year":
-                        responseS.add(number + " BC is the year that we do not know what happened.");
-                        break;
-                }
+                responseS.add(numberService.emplyNumber(responseS, number, type));
             }
 
             return ResponseEntity.ok(responseS);
@@ -121,19 +113,9 @@ public class DefaultFactCategoryService implements FactCategoryService {
             return ResponseEntity.badRequest().body(Collections.singletonList("Invalid number format."));
         } catch (Exception e) {
             if (responseS.isEmpty()) {
-                switch (type) {
-                    case "trivia":
-                        responseS.add(number + " is an uninteresting number.");
-                        break;
-                    case "math":
-                        responseS.add(number + " is a boring number.");
-                        break;
-                    case "year":
-                        responseS.add(number + " BC is the year that we do not know what happened.");
-                        break;
-                }
+                responseS.add(numberService.emplyNumber(responseS, number, type));
             }
-            return ResponseEntity.ok(responseS);
+            return ResponseEntity.ok().body(responseS);
         }
     }
 

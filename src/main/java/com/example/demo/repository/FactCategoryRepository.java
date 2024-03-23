@@ -1,6 +1,5 @@
 package com.example.demo.repository;
 
-import com.example.demo.entity.CategoryEntity;
 import com.example.demo.entity.FactCategoryEntity;
 import com.example.demo.entity.FactEntity;
 

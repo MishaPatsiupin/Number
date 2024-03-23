@@ -1,6 +1,5 @@
-package com.example.demo.service.defaultService;
+package com.example.demo.service.def;
 
-import com.example.demo.entity.FactCategoryEntity;
 import com.example.demo.entity.FactEntity;
 import com.example.demo.entity.NumberEntity;
 import com.example.demo.repository.CategoryRepository;
@@ -10,11 +9,6 @@ import com.example.demo.repository.NumberRepository;
 import com.example.demo.service.FactService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
 
 @Service
 @RequiredArgsConstructor
@@ -44,7 +38,7 @@ public class DefaultFactService implements FactService {
 
     @Override
     public FactEntity findFact(String description) {
-        return (FactEntity) factRepository.findByDescription(description);
+        return factRepository.findByDescription(description);
     }
 
     @Override

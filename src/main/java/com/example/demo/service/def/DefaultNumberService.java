@@ -1,4 +1,4 @@
-package com.example.demo.service.defaultService;
+package com.example.demo.service.def;
 
 import com.example.demo.entity.NumberEntity;
 import com.example.demo.service.NumberService;
@@ -7,6 +7,7 @@ import com.example.demo.repository.NumberRepository;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -65,5 +66,23 @@ public class DefaultNumberService implements NumberService {
     @Override
     public void deleteNumber(long id) {
         numberRepository.deleteById(id);
+    }
+
+
+    public enum Type {
+        TRIVIA, MATH, YEAR
+    }
+    @Override
+    public String emplyNumber(List<String> responseS, long number, String type) {
+            DefaultNumberService.Type typeEnum = DefaultNumberService.Type.valueOf(type.toUpperCase());
+            switch (typeEnum) {
+                case TRIVIA:
+                    return number + " is an uninteresting number.";
+                case MATH:
+                    return number + " is a boring number.";
+                case YEAR:
+                    return number + " BC is the year that we do not know what happened.";
+            }
+            return "Xmm. Oy";
     }
 }
