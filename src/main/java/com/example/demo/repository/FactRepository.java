@@ -11,7 +11,6 @@ import java.util.List;
 
 public interface FactRepository extends CrudRepository<FactEntity, Long> {
 
-    long findIdByNumberId(long idNum);
     @Query("SELECT f FROM FactEntity f WHERE f.description = :description")
     FactEntity findByDescription(@Param("description") String description);
 
