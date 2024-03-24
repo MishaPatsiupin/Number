@@ -18,7 +18,8 @@ public interface FactRepository extends CrudRepository<FactEntity, Long> {
     @Query( "SELECT f FROM FactEntity f WHERE f.number = :number")
     List<FactEntity> findFactEntityByNumber(@Param("number") NumberEntity numId);
 
-
+    @Query("SELECT COUNT(f) FROM FactEntity f WHERE f.number.id = :numberId")
+    long countByNumberId(long numberId);
 
     FactEntity findByNumber( NumberEntity number);
 }

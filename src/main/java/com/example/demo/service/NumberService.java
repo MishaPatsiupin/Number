@@ -7,6 +7,7 @@ import java.util.List;
 
 public interface NumberService {
     ResponseEntity<String> addNumber(long numberData);
+    ResponseEntity<String> delNumber(String number);
     long findIdByNumber(long numberData);
     NumberEntity createNumber(long numberData);
 

@@ -31,6 +31,22 @@ public class DefaultNumberService implements NumberService {
     }
 
     @Override
+    public ResponseEntity<String> delNumber(String number) {
+        try {
+            long numberData = Long.parseLong(number);
+            NumberEntity existingNumber = this.findNumber(numberData);
+            if (existingNumber != null) {
+                numberRepository.delete(this.findNumber(numberData));
+                return ResponseEntity.ok().body("Number delete successfully.");
+            }
+
+            return ResponseEntity.ok("Number not found.");
+        } catch (NumberFormatException e) {
+            return ResponseEntity.badRequest().body("Invalid number format");
+        }
+    }
+
+    @Override
     public long findIdByNumber(long id) {
         return numberRepository.findByNumberData(id).getId();
     }
