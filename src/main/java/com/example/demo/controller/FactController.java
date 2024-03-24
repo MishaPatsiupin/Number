@@ -9,12 +9,12 @@ import com.example.demo.repository.CategoryRepository;
 import com.example.demo.repository.FactCategoryRepository;
 import com.example.demo.repository.FactRepository;
 import com.example.demo.repository.NumberRepository;
-import com.example.demo.service.FactCategoryService;
 import com.example.demo.service.FactService;
 import com.example.demo.service.NumberService;
 import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
 import org.springframework.format.annotation.NumberFormat;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -28,7 +28,6 @@ public class FactController {
     private final FactService factService;
     private CategoryRepository categoryRepository;
     private final FactCategoryRepository factCategoryRepository;
-    private final FactCategoryService factCategoryService;
     private final FactRepository factRepository;
 
 
@@ -58,7 +57,7 @@ public class FactController {
     }
 
     @DeleteMapping(value = "/fact/delete")
-    public ResponseEntity<String> delFact(@RequestParam(value = "number")
+    public ResponseEntity<String> delFact(@RequestParam(value = "id")
                                           @Pattern(regexp = "\\d+")
                                           @NumberFormat(style = NumberFormat.Style.NUMBER) String number) {
 
@@ -93,29 +92,32 @@ public class FactController {
                                           @Pattern(regexp = "\\d+")
                                           @NumberFormat(style = NumberFormat.Style.NUMBER) long factId,
                                           @RequestParam(value = "number", required = false)
-                                          // Установлено значение required = false
                                           @Pattern(regexp = "\\d+")
-                                          @NumberFormat(style = NumberFormat.Style.NUMBER) Long number, // Использован класс обертка Long
+                                          @NumberFormat(style = NumberFormat.Style.NUMBER) Long number,
                                           @RequestParam(value = "type", defaultValue = "nothing")
-                                          // Удалено значение "nothing"
                                           @Pattern(regexp = "^(year|math|trivia)$") String type,
                                           @RequestParam(value = "fact", defaultValue = "it's a boring number")
-                                          // Установлено значение defaultValue = null
                                           @Pattern(regexp = "[A-Za-z0-9\\s.,;!?\"'-]+") String newFact) {
 
+        try {
 
-        FactCategoryEntity factCategoryEntity = factCategoryRepository.findFactCategoryEntitiesById(factId);
+            FactCategoryEntity factCategoryEntity = factCategoryRepository.findFactCategoryEntitiesById(factId);
 
-        if (!type.equals("nothing") && !factCategoryEntity.getCategory().getName().equals(type)) {
+            if (factCategoryEntity == null) {
+                return ResponseEntity.badRequest().body("Fact not found for the given ID.");
+            }
+
+            if (!type.equals("nothing") && !factCategoryEntity.getCategory().getName().equals(type)) {
                 factCategoryEntity.setCategory(categoryRepository.findCategoryByName(type));
                 factCategoryRepository.save(factCategoryEntity);
+            }
+            if (factCategoryEntity.getFact().getNumber().getNumberData() != number.longValue()) {
+                factCategoryEntity.getFact().setNumber(numberService.createNumber(number.longValue()));
+                factCategoryRepository.save(factCategoryEntity);
+            }
+            return ResponseEntity.ok("Update fact: " + factCategoryRepository.findFactCategoryEntitiesById(factId));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred while updating the fact.");
         }
-        if (factCategoryEntity.getFact().getNumber().getNumberData() != number.longValue()) {
-            factCategoryEntity.getFact().setNumber(numberService.createNumber(number.longValue()));
-            factCategoryRepository.save(factCategoryEntity);
-        }
-
-
-        return ResponseEntity.ok("Update fact:" + factCategoryRepository.findFactCategoryEntitiesById(factId));
     }
 }

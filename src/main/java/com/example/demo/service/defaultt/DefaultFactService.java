@@ -1,4 +1,4 @@
-package com.example.demo.service.def;
+package com.example.demo.service.defaultt;
 
 import com.example.demo.entity.FactCategoryEntity;
 import com.example.demo.entity.FactEntity;

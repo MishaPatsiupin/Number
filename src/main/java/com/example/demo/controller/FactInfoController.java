@@ -1,5 +1,6 @@
 package com.example.demo.controller;
 
+import com.example.demo.entity.CategoryEntity;
 import com.example.demo.entity.FactCategoryEntity;
 import com.example.demo.repository.CategoryRepository;
 import com.example.demo.repository.FactCategoryRepository;

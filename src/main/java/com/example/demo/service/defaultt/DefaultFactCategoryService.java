@@ -1,4 +1,4 @@
-package com.example.demo.service.def;
+package com.example.demo.service.defaultt;
 
 import com.example.demo.entity.CategoryEntity;
 import com.example.demo.entity.FactCategoryEntity;
@@ -9,14 +9,13 @@ import com.example.demo.repository.FactRepository;
 import com.example.demo.repository.NumberRepository;
 import com.example.demo.service.FactCategoryService;
 import com.example.demo.service.NumberService;
+import com.example.demo.utils.CategoryCounter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.security.SecureRandom;
 import java.util.*;
-
-import static java.lang.Math.random;
 
 @Service
 public class DefaultFactCategoryService implements FactCategoryService {
@@ -87,6 +86,7 @@ public class DefaultFactCategoryService implements FactCategoryService {
 
     public ResponseEntity<List<String>> getFactsByFactAndCategory(String numberS, String type) {
         List<String> responseS = new ArrayList<>();
+        List<FactCategoryEntity> categories;
         long number = 0;
 
         try {
@@ -110,6 +110,11 @@ public class DefaultFactCategoryService implements FactCategoryService {
                 responseS.add(numberService.emplyNumber(responseS, number, type));
             }
 
+            categories = factCategoryRepository.findByNumberData(number);
+            CategoryCounter counter = new CategoryCounter();
+            counter.addCategoryFacts(responseS, categories);
+
+
             return ResponseEntity.ok(responseS);
         } catch (NumberFormatException e) {
             return ResponseEntity.badRequest().body(Collections.singletonList("Invalid number format."));
@@ -117,6 +122,11 @@ public class DefaultFactCategoryService implements FactCategoryService {
             if (responseS.isEmpty()) {
                 responseS.add(numberService.emplyNumber(responseS, number, type));
             }
+
+            categories = factCategoryRepository.findByNumberData(number);
+            CategoryCounter counter = new CategoryCounter();
+            counter.addCategoryFacts(responseS, categories);
+
             return ResponseEntity.ok().body(responseS);
         }
     }
