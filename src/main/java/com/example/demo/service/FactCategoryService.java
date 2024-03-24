@@ -12,6 +12,7 @@ public interface FactCategoryService {
 
     void updateFactCategory(long id, long catId, long facId);
 
-    ResponseEntity<List<String>> getFactCategoryByFactAndCategory(String numberS, String type);
+    ResponseEntity<List<String>> getFactsByFactAndCategory(String numberS, String type);
+    ResponseEntity<String> getFactByFactAndCategory(String numberS, String type);
 
 }

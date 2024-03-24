@@ -63,13 +63,22 @@ public class FactInfoController {
         return ResponseEntity.ok(testS);
     }
 
-    @GetMapping(value = "/info/all")
+    @GetMapping(value = "/info")
+    public ResponseEntity<String> getInfoOne(@RequestParam(value = "number", defaultValue = "random")
+                                                 @Pattern(regexp = "\\d+|^(random)") String numberS,
+                                             @RequestParam(value = "type", defaultValue = "trivia")
+                                                 @Pattern(regexp = "^(year|math|trivia)$") String type){
+
+        return factCategoryService.getFactByFactAndCategory(numberS, type);
+    }
+
+    @GetMapping(value = "/info/all", produces = "application/json")
     public ResponseEntity<List<String>> getInfoAll(@RequestParam(value = "number", defaultValue = "random")
                                                    @Pattern(regexp = "\\d+|^(random)") String numberS,
                                                    @RequestParam(value = "type", defaultValue = "trivia")
                                                    @Pattern(regexp = "^(year|math|trivia)$") String type) {
 
-        return factCategoryService.getFactCategoryByFactAndCategory(numberS, type);
+        return factCategoryService.getFactsByFactAndCategory(numberS, type);
     }
 
 

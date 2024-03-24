@@ -16,6 +16,8 @@ import org.springframework.stereotype.Service;
 import java.security.SecureRandom;
 import java.util.*;
 
+import static java.lang.Math.random;
+
 @Service
 public class DefaultFactCategoryService implements FactCategoryService {
 
@@ -83,7 +85,7 @@ public class DefaultFactCategoryService implements FactCategoryService {
     }
 
 
-    public ResponseEntity<List<String>> getFactCategoryByFactAndCategory(String numberS, String type) {
+    public ResponseEntity<List<String>> getFactsByFactAndCategory(String numberS, String type) {
         List<String> responseS = new ArrayList<>();
         long number = 0;
 
@@ -117,6 +119,19 @@ public class DefaultFactCategoryService implements FactCategoryService {
             }
             return ResponseEntity.ok().body(responseS);
         }
+    }
+
+    @Override
+    public ResponseEntity<String> getFactByFactAndCategory(String numberS, String type) {
+        ResponseEntity<List<String>> facts = this.getFactsByFactAndCategory(numberS, type);
+        ResponseEntity<String> fact = null;
+        if (facts.getBody().size() > 1) {
+            int factRandom = random.nextInt(facts.getBody().size());
+            fact = ResponseEntity.ok().body(facts.getBody().get(factRandom));
+        } else {
+            return ResponseEntity.ok().body(facts.getBody().get(0));
+        }
+        return fact;
     }
 
 
