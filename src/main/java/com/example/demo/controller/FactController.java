@@ -17,10 +17,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.format.annotation.NumberFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @Validated
 @RestController
@@ -34,31 +31,6 @@ public class FactController {
     private final FactCategoryService factCategoryService;
     private final FactRepository factRepository;
 
-    @PostMapping(value = "/number/add")
-    public ResponseEntity<String> addNumber(@RequestParam(value = "number")
-                                            @Pattern(regexp = "\\d+")
-                                            @NumberFormat(style = NumberFormat.Style.NUMBER) long number) {
-
-            return numberService.addNumber(number);
-    }
-
-    @DeleteMapping(value = "/number/delete")
-    public ResponseEntity<String> delNumber(@RequestParam(value = "number")
-                                            @Pattern(regexp = "\\d+")
-                                            @NumberFormat(style = NumberFormat.Style.NUMBER) String number) {
-        try {
-            long numberData = Long.parseLong(number);
-            NumberEntity existingNumber = numberService.findNumber(numberData);
-            if (existingNumber != null) {
-                numberRepository.delete(numberService.findNumber(numberData));
-                return ResponseEntity.ok().body("Number delete.");
-            }
-
-            return ResponseEntity.ok("Number delete successfully.");
-        } catch (NumberFormatException e) {
-            return ResponseEntity.badRequest().body("Invalid number format");
-        }
-    }
 
     @PostMapping(value = "/fact/add")
     public ResponseEntity<String> addFact(@RequestParam(value = "number")
@@ -81,21 +53,33 @@ public class FactController {
 
             return ResponseEntity.ok("Fact added successfully with ID: " + createdFact.getId());
         } catch (NumberFormatException e) {
-            return ResponseEntity.badRequest().body("Invalid number format");
+            return ResponseEntity.badRequest().body("Invalid number/fact format");
         }
     }
 
     @DeleteMapping(value = "/fact/delete")
     public ResponseEntity<String> delFact(@RequestParam(value = "number")
-                                            @Pattern(regexp = "\\d+")
-                                            @NumberFormat(style = NumberFormat.Style.NUMBER) String number) {
+                                          @Pattern(regexp = "\\d+")
+                                          @NumberFormat(style = NumberFormat.Style.NUMBER) String number) {
+
         try {
             long numberData = Long.parseLong(number);
             FactCategoryEntity factCategoryEntity = factCategoryRepository.findFactCategoryEntitiesById(numberData);
             if (factCategoryEntity != null) {
                 factCategoryRepository.delete(factCategoryRepository.getFactCategoryByFactEntity(factRepository.findById(numberData).get()));
+
+                NumberEntity delNumber = factRepository.findById(numberData).get().getNumber();
                 factRepository.deleteById(numberData);
-                return ResponseEntity.ok().body("Fact delete successfully.");
+
+                long numId = factCategoryEntity.getFact().getNumber().getId();
+                if (factRepository.countByNumberId(numId) > 0) {
+                    // Если список не пустой, значит есть соответствующий факт
+                    return ResponseEntity.ok().body("Fact delete successfully.");
+                } else {
+                    numberRepository.delete(delNumber);
+
+                    return ResponseEntity.ok().body("Fact delete successfully.");
+                }
             }
 
             return ResponseEntity.ok("Fact not found.");
@@ -104,5 +88,34 @@ public class FactController {
         }
     }
 
+    @PutMapping(value = "/fact/update")
+    public ResponseEntity<String> updFact(@RequestParam(value = "id")
+                                          @Pattern(regexp = "\\d+")
+                                          @NumberFormat(style = NumberFormat.Style.NUMBER) long factId,
+                                          @RequestParam(value = "number", required = false)
+                                          // Установлено значение required = false
+                                          @Pattern(regexp = "\\d+")
+                                          @NumberFormat(style = NumberFormat.Style.NUMBER) Long number, // Использован класс обертка Long
+                                          @RequestParam(value = "type", defaultValue = "nothing")
+                                          // Удалено значение "nothing"
+                                          @Pattern(regexp = "^(year|math|trivia)$") String type,
+                                          @RequestParam(value = "fact", defaultValue = "it's a boring number")
+                                          // Установлено значение defaultValue = null
+                                          @Pattern(regexp = "[A-Za-z0-9\\s.,;!?\"'-]+") String newFact) {
 
+
+        FactCategoryEntity factCategoryEntity = factCategoryRepository.findFactCategoryEntitiesById(factId);
+
+        if (!type.equals("nothing") && !factCategoryEntity.getCategory().getName().equals(type)) {
+                factCategoryEntity.setCategory(categoryRepository.findCategoryByName(type));
+                factCategoryRepository.save(factCategoryEntity);
+        }
+        if (factCategoryEntity.getFact().getNumber().getNumberData() != number.longValue()) {
+            factCategoryEntity.getFact().setNumber(numberService.createNumber(number.longValue()));
+            factCategoryRepository.save(factCategoryEntity);
+        }
+
+
+        return ResponseEntity.ok("Update fact:" + factCategoryRepository.findFactCategoryEntitiesById(factId));
+    }
 }
