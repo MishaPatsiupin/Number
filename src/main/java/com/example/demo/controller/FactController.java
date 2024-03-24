@@ -7,7 +7,9 @@ import com.example.demo.entity.FactEntity;
 import com.example.demo.entity.NumberEntity;
 import com.example.demo.repository.CategoryRepository;
 import com.example.demo.repository.FactCategoryRepository;
+import com.example.demo.repository.FactRepository;
 import com.example.demo.repository.NumberRepository;
+import com.example.demo.service.FactCategoryService;
 import com.example.demo.service.FactService;
 import com.example.demo.service.NumberService;
 import jakarta.validation.constraints.Pattern;
@@ -29,6 +31,8 @@ public class FactController {
     private final FactService factService;
     private CategoryRepository categoryRepository;
     private final FactCategoryRepository factCategoryRepository;
+    private final FactCategoryService factCategoryService;
+    private final FactRepository factRepository;
 
     @PostMapping(value = "/number/add")
     public ResponseEntity<String> addNumber(@RequestParam(value = "number")
@@ -50,8 +54,7 @@ public class FactController {
                 return ResponseEntity.ok().body("Number delete.");
             }
 
-            NumberEntity createdNumber = numberService.createNumber(numberData);
-            return ResponseEntity.ok("Number added successfully: " + createdNumber.getNumberData());
+            return ResponseEntity.ok("Number delete successfully.");
         } catch (NumberFormatException e) {
             return ResponseEntity.badRequest().body("Invalid number format");
         }
@@ -79,6 +82,25 @@ public class FactController {
             return ResponseEntity.ok("Fact added successfully with ID: " + createdFact.getId());
         } catch (NumberFormatException e) {
             return ResponseEntity.badRequest().body("Invalid number format");
+        }
+    }
+
+    @DeleteMapping(value = "/fact/delete")
+    public ResponseEntity<String> delFact(@RequestParam(value = "number")
+                                            @Pattern(regexp = "\\d+")
+                                            @NumberFormat(style = NumberFormat.Style.NUMBER) String number) {
+        try {
+            long numberData = Long.parseLong(number);
+            FactCategoryEntity factCategoryEntity = factCategoryRepository.findFactCategoryEntitiesById(numberData);
+            if (factCategoryEntity != null) {
+                factCategoryRepository.delete(factCategoryRepository.getFactCategoryByFactEntity(factRepository.findById(numberData).get()));
+                factRepository.deleteById(numberData);
+                return ResponseEntity.ok().body("Fact delete successfully.");
+            }
+
+            return ResponseEntity.ok("Fact not found.");
+        } catch (NumberFormatException e) {
+            return ResponseEntity.badRequest().body("Invalid id format");
         }
     }
 

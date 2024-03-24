@@ -15,6 +15,8 @@ public interface FactCategoryRepository extends CrudRepository<FactCategoryEntit
     List<FactCategoryEntity> findFactCategoriesByFactId(@Param("factId") long factId);
 
     long getCategoryByFact(FactEntity facId);
+    @Query("SELECT fc FROM FactCategoryEntity fc WHERE fc.fact.id = :idFact")
+    FactCategoryEntity findFactCategoryEntitiesById(long idFact);
 
     @Query("SELECT fc FROM FactCategoryEntity fc WHERE fc.fact = :factEntity")
     FactCategoryEntity getFactCategoryByFactEntity(@Param("factEntity") FactEntity factEntity);
