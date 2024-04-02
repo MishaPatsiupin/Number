@@ -1,12 +1,12 @@
 package com.example.demo.service;
 
-import com.example.demo.entity.FactCategoryEntity;
+import com.example.demo.entity.FactCategory;
 import org.springframework.http.ResponseEntity;
 
 import java.util.List;
 
 public interface FactCategoryService {
-    FactCategoryEntity createFactCategory(long catId, long facId);
+    FactCategory createFactCategory(long catId, long facId);
 
     void deleteFactCategory(long id);
 

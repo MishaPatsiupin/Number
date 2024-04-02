@@ -1,8 +1,8 @@
 package com.example.demo.service.defaultt;
 
-import com.example.demo.entity.CategoryEntity;
-import com.example.demo.entity.FactCategoryEntity;
-import com.example.demo.entity.FactEntity;
+import com.example.demo.entity.Category;
+import com.example.demo.entity.Fact;
+import com.example.demo.entity.FactCategory;
 import com.example.demo.repository.CategoryRepository;
 import com.example.demo.repository.FactCategoryRepository;
 import com.example.demo.repository.FactRepository;
@@ -27,21 +27,21 @@ public class DefaultFactCategoryService implements FactCategoryService {
     private final NumberService numberService;
     private final SecureRandom random = new SecureRandom();
 
-    private CategoryEntity getCategoryEntityById(long catId) {
-        // Логика получения CategoryEntity по идентификатору
-        Optional<CategoryEntity> categoryOptional = categoryRepository.findById(catId);
+    private Category getCategoryEntityById(long catId) {
+        // Логика получения Category по идентификатору
+        Optional<Category> categoryOptional = categoryRepository.findById(catId);
         return categoryOptional.orElse(null);
     }
 
-    private FactEntity getFactEntityById(long facId) {
-        // Логика получения FactEntity по идентификатору
-        Optional<FactEntity> factOptional = factRepository.findById(facId);
+    private Fact getFactEntityById(long facId) {
+        // Логика получения Fact по идентификатору
+        Optional<Fact> factOptional = factRepository.findById(facId);
         return factOptional.orElse(null);
     }
 
-    private FactCategoryEntity getFactCategoryEntityById(long id) {
-        // Логика получения FactCategoryEntity по идентификатору
-        Optional<FactCategoryEntity> factCategoryOptional = factCategoryRepository.findById(id);
+    private FactCategory getFactCategoryEntityById(long id) {
+        // Логика получения FactCategory по идентификатору
+        Optional<FactCategory> factCategoryOptional = factCategoryRepository.findById(id);
         return factCategoryOptional.orElse(null);
     }
 
@@ -55,11 +55,11 @@ public class DefaultFactCategoryService implements FactCategoryService {
     }
 
     @Override
-    public FactCategoryEntity createFactCategory(long catId, long facId) {
-        FactCategoryEntity factCategoryEntity = new FactCategoryEntity();
-        // Получение связанных сущностей CategoryEntity и FactEntity из их идентификаторов
-        CategoryEntity categoryEntity = getCategoryEntityById(catId);
-        FactEntity factEntity = getFactEntityById(facId);
+    public FactCategory createFactCategory(long catId, long facId) {
+        FactCategory factCategoryEntity = new FactCategory();
+        // Получение связанных сущностей Category и Fact из их идентификаторов
+        Category categoryEntity = getCategoryEntityById(catId);
+        Fact factEntity = getFactEntityById(facId);
         factCategoryEntity.setCategory(categoryEntity);
         factCategoryEntity.setFact(factEntity);
         return factCategoryRepository.save(factCategoryEntity);
@@ -73,10 +73,10 @@ public class DefaultFactCategoryService implements FactCategoryService {
 
     @Override
     public void updateFactCategory(long id, long catId, long facId) {
-        FactCategoryEntity factCategoryEntity = getFactCategoryEntityById(id);
+        FactCategory factCategoryEntity = getFactCategoryEntityById(id);
         if (factCategoryEntity != null) {
-            CategoryEntity categoryEntity = getCategoryEntityById(catId);
-            FactEntity factEntity = getFactEntityById(facId);
+            Category categoryEntity = getCategoryEntityById(catId);
+            Fact factEntity = getFactEntityById(facId);
             factCategoryEntity.setCategory(categoryEntity);
             factCategoryEntity.setFact(factEntity);
             factCategoryRepository.save(factCategoryEntity);
@@ -86,7 +86,7 @@ public class DefaultFactCategoryService implements FactCategoryService {
 
     public ResponseEntity<List<String>> getFactsByFactAndCategory(String numberS, String type) {
         List<String> responseS = new ArrayList<>();
-        List<FactCategoryEntity> categories;
+        List<FactCategory> categories;
         long number = 0;
 
         try {
@@ -98,7 +98,7 @@ public class DefaultFactCategoryService implements FactCategoryService {
 
             long numberId = numberRepository.findByNumberData(number).getId();
 
-            List<FactCategoryEntity> allFactByNumber;
+            List<FactCategory> allFactByNumber;
             allFactByNumber = factCategoryRepository.findFactCategoriesByFactId(numberId);
 
             for (int i = 0; i < allFactByNumber.size(); i++) {

@@ -6,7 +6,7 @@ import lombok.Data;
 @Entity
 @Data
 @Table(name = "fact")
-public class FactEntity {
+public class Fact {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     @Column(name = "id")
@@ -14,7 +14,7 @@ public class FactEntity {
 
     @ManyToOne
     @JoinColumn(name = "number_id", referencedColumnName = "id")
-    private NumberEntity number;
+    private Numbeer number;
 
     @Basic
     @Column(name = "description")

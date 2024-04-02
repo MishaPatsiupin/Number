@@ -1,6 +1,6 @@
 package com.example.demo.service.defaultt;
 
-import com.example.demo.entity.NumberEntity;
+import com.example.demo.entity.Numbeer;
 import com.example.demo.service.NumberService;
 import lombok.RequiredArgsConstructor;
 import com.example.demo.repository.NumberRepository;
@@ -18,12 +18,12 @@ public class DefaultNumberService implements NumberService {
     @Override
     public ResponseEntity<String> addNumber(long numberData) {
         try {
-            NumberEntity existingNumber = findNumber(numberData);
+            Numbeer existingNumber = findNumber(numberData);
             if (existingNumber != null) {
                 return ResponseEntity.badRequest().body("Number already exists");
             }
 
-            NumberEntity createdNumber = createNumber(numberData);
+            Numbeer createdNumber = createNumber(numberData);
             return ResponseEntity.ok("Number added successfully: " + createdNumber.getNumberData());
         } catch (NumberFormatException e) {
             return ResponseEntity.badRequest().body("Invalid number format");
@@ -34,7 +34,7 @@ public class DefaultNumberService implements NumberService {
     public ResponseEntity<String> delNumber(String number) {
         try {
             long numberData = Long.parseLong(number);
-            NumberEntity existingNumber = this.findNumber(numberData);
+            Numbeer existingNumber = this.findNumber(numberData);
             if (existingNumber != null) {
                 numberRepository.delete(this.findNumber(numberData));
                 return ResponseEntity.ok().body("Number delete successfully.");
@@ -52,27 +52,27 @@ public class DefaultNumberService implements NumberService {
     }
 
     @Override
-    public NumberEntity createNumber(long numberData) {
-        Optional<NumberEntity> existingNumber = Optional.ofNullable(numberRepository.findByNumberData(numberData));
+    public Numbeer createNumber(long numberData) {
+        Optional<Numbeer> existingNumber = Optional.ofNullable(numberRepository.findByNumberData(numberData));
 
         if (existingNumber.isPresent()) {
             return existingNumber.get();
         }
 
-        NumberEntity numberEntity = new NumberEntity();
+        Numbeer numberEntity = new Numbeer();
         numberEntity.setNumberData(numberData);
         return numberRepository.save(numberEntity);
     }
 
     @Override
-    public NumberEntity findNumber(long numberData) {
+    public Numbeer findNumber(long numberData) {
 
         return numberRepository.findByNumberData(numberData);
     }
 
     @Override
     public void updateNumber(long id, long numberData) {
-        Optional<NumberEntity> existingNumber = numberRepository.findById(id);
+        Optional<Numbeer> existingNumber = numberRepository.findById(id);
         existingNumber.ifPresent(numberEntity -> {
             numberEntity.setNumberData(numberData);
             numberRepository.save(numberEntity);

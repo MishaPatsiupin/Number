@@ -1,6 +1,6 @@
 package com.example.demo.service;
 
-import com.example.demo.entity.NumberEntity;
+import com.example.demo.entity.Numbeer;
 import org.springframework.http.ResponseEntity;
 
 import java.util.List;
@@ -9,9 +9,9 @@ public interface NumberService {
     ResponseEntity<String> addNumber(long numberData);
     ResponseEntity<String> delNumber(String number);
     long findIdByNumber(long numberData);
-    NumberEntity createNumber(long numberData);
+    Numbeer createNumber(long numberData);
 
-    NumberEntity findNumber(long numberData);
+    Numbeer findNumber(long numberData);
 
     void updateNumber(long id, long numberData);
 

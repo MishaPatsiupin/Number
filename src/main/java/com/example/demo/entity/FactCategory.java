@@ -6,7 +6,7 @@ import lombok.Data;
 @Entity
 @Data
 @Table(name = "fact_category")
-public class FactCategoryEntity {
+public class FactCategory {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     @Column(name = "id")
@@ -14,10 +14,12 @@ public class FactCategoryEntity {
 
     @ManyToOne
     @JoinColumn(name = "category_id", referencedColumnName = "id")
-    private CategoryEntity category;
+    private Category category;
 
     @ManyToOne
     @JoinColumn(name = "fact_id", referencedColumnName = "id")
-    private FactEntity fact;
+    private Fact fact;
 
+    @Column(name = "author", nullable = false, columnDefinition = "text default 'UNKNOWN'")
+    private String author;
 }

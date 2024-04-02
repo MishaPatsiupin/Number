@@ -1,7 +1,6 @@
 package com.example.demo.controller;
 
-import com.example.demo.entity.CategoryEntity;
-import com.example.demo.entity.FactCategoryEntity;
+import com.example.demo.entity.FactCategory;
 import com.example.demo.repository.CategoryRepository;
 import com.example.demo.repository.FactCategoryRepository;
 import com.example.demo.repository.NumberRepository;
@@ -49,7 +48,7 @@ public class FactInfoController {
 
         long numberId = numberRepository.findByNumberData(number).getId();//+
 
-        List<FactCategoryEntity> test;
+        List<FactCategory> test;
         test = factCategoryRepository.findFactCategoriesByFactId(numberId);//+
 
 

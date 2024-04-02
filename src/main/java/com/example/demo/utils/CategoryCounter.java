@@ -1,10 +1,8 @@
 package com.example.demo.utils;
 
-import com.example.demo.entity.FactCategoryEntity;
+import com.example.demo.entity.FactCategory;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class CategoryCounter {
 
@@ -23,9 +21,9 @@ public class CategoryCounter {
         }
     }
 
-    public void addCategoryFacts(List<String> response, List<FactCategoryEntity> entities) {
+    public void addCategoryFacts(List<String> response, List<FactCategory> entities) {
 
-        for(FactCategoryEntity entity : entities) {
+        for(FactCategory entity : entities) {
             incrementCategory(entity.getCategory().getName());
         }
 

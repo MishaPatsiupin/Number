@@ -1,7 +1,7 @@
 package com.example.demo.repository;
 
-import com.example.demo.entity.FactCategoryEntity;
-import com.example.demo.entity.FactEntity;
+import com.example.demo.entity.Fact;
+import com.example.demo.entity.FactCategory;
 
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
@@ -10,21 +10,21 @@ import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 
-public interface FactCategoryRepository extends CrudRepository<FactCategoryEntity, Long> {
-    @Query("SELECT fc FROM FactCategoryEntity fc WHERE fc.fact.number.id = :factId")
-    List<FactCategoryEntity> findFactCategoriesByFactId(@Param("factId") long factId);
+public interface FactCategoryRepository extends CrudRepository<FactCategory, Long> {
+    @Query("SELECT fc FROM FactCategory fc WHERE fc.fact.number.id = :factId")
+    List<FactCategory> findFactCategoriesByFactId(@Param("factId") long factId);
 
-    @Query("SELECT fc FROM FactCategoryEntity fc WHERE fc.fact.id = :idFact")
-    FactCategoryEntity findFactCategoryEntitiesById(long idFact);
-    @Query("SELECT fc FROM FactCategoryEntity fc " +
+    @Query("SELECT fc FROM FactCategory fc WHERE fc.fact.id = :idFact")
+    FactCategory findFactCategoryEntitiesById(long idFact);
+    @Query("SELECT fc FROM FactCategory fc " +
             "JOIN fc.fact f " +
             "JOIN f.number n " +
             "WHERE n.numberData = :numberData")
-    List<FactCategoryEntity> findByNumberData(@Param("numberData") long numberData);
+    List<FactCategory> findByNumberData(@Param("numberData") long numberData);
 
 
-    @Query("SELECT fc FROM FactCategoryEntity fc WHERE fc.fact = :factEntity")
-    FactCategoryEntity getFactCategoryByFactEntity(@Param("factEntity") FactEntity factEntity);
+    @Query("SELECT fc FROM FactCategory fc WHERE fc.fact = :factEntity")
+    FactCategory getFactCategoryByFactEntity(@Param("factEntity") Fact factEntity);
 
 
 

@@ -1,8 +1,8 @@
 package com.example.demo.service.defaultt;
 
-import com.example.demo.entity.FactCategoryEntity;
-import com.example.demo.entity.FactEntity;
-import com.example.demo.entity.NumberEntity;
+import com.example.demo.entity.FactCategory;
+import com.example.demo.entity.Fact;
+import com.example.demo.entity.Numbeer;
 import com.example.demo.repository.CategoryRepository;
 import com.example.demo.repository.FactCategoryRepository;
 import com.example.demo.repository.FactRepository;
@@ -25,11 +25,11 @@ public class DefaultFactService implements FactService {
     public ResponseEntity<String> deleteFact(String number) {
         try {
             long numberData = Long.parseLong(number);
-            FactCategoryEntity factCategoryEntity = factCategoryRepository.findFactCategoryEntitiesById(numberData);
+            FactCategory factCategoryEntity = factCategoryRepository.findFactCategoryEntitiesById(numberData);
             if (factCategoryEntity != null) {
                 factCategoryRepository.delete(factCategoryRepository.getFactCategoryByFactEntity(factRepository.findById(numberData).get()));
 
-                NumberEntity delNumber = factRepository.findById(numberData).get().getNumber();
+                Numbeer delNumber = factRepository.findById(numberData).get().getNumber();
                 factRepository.deleteById(numberData);
                 if (factRepository.findByNumber(delNumber) != null) {
                     return ResponseEntity.ok().body("Fact delete successfully.");
@@ -46,16 +46,16 @@ public class DefaultFactService implements FactService {
     }
 
     @Override
-    public FactEntity createFact(long number, String description) {
-        NumberEntity existingNumber = numberRepository.findByNumberData(number);
+    public Fact createFact(long number, String description) {
+        Numbeer existingNumber = numberRepository.findByNumberData(number);
 
         if (existingNumber == null) {
-            existingNumber = new NumberEntity();
+            existingNumber = new Numbeer();
             existingNumber.setNumberData(number);
-            existingNumber = numberRepository.save(existingNumber); // Save the new NumberEntity to generate an ID
+            existingNumber = numberRepository.save(existingNumber); // Save the new Numbeer to generate an ID
         }
 
-        FactEntity factEntity = new FactEntity();
+        Fact factEntity = new Fact();
         factEntity.setNumber(existingNumber);
         factEntity.setDescription(description);
 
@@ -63,13 +63,13 @@ public class DefaultFactService implements FactService {
     }
 
     @Override
-    public FactEntity findFact(String description) {
+    public Fact findFact(String description) {
         return factRepository.findByDescription(description);
     }
 
     @Override
-    public FactEntity getFactByNumberId(long number) {
-        NumberEntity numberEntity = numberRepository.findByNumberData(number);
+    public Fact getFactByNumberId(long number) {
+        Numbeer numberEntity = numberRepository.findByNumberData(number);
 
         return factRepository.findByNumber(numberEntity);
     }

@@ -1,10 +1,10 @@
 package com.example.demo.controller;
 
 
-import com.example.demo.entity.CategoryEntity;
-import com.example.demo.entity.FactCategoryEntity;
-import com.example.demo.entity.FactEntity;
-import com.example.demo.entity.NumberEntity;
+import com.example.demo.entity.Category;
+import com.example.demo.entity.FactCategory;
+import com.example.demo.entity.Fact;
+import com.example.demo.entity.Numbeer;
 import com.example.demo.repository.CategoryRepository;
 import com.example.demo.repository.FactCategoryRepository;
 import com.example.demo.repository.FactRepository;
@@ -42,10 +42,10 @@ public class FactController {
         try {
 
             numberService.addNumber(numberData);
-            CategoryEntity existingCategory = categoryRepository.findCategoryByName(type);
-            FactEntity createdFact = factService.createFact(numberData, newFact);
+            Category existingCategory = categoryRepository.findCategoryByName(type);
+            Fact createdFact = factService.createFact(numberData, newFact);
 
-            FactCategoryEntity factCategory = new FactCategoryEntity();
+            FactCategory factCategory = new FactCategory();
             factCategory.setCategory(existingCategory);
             factCategory.setFact(createdFact);
             factCategoryRepository.save(factCategory);
@@ -63,11 +63,11 @@ public class FactController {
 
         try {
             long numberData = Long.parseLong(number);
-            FactCategoryEntity factCategoryEntity = factCategoryRepository.findFactCategoryEntitiesById(numberData);
+            FactCategory factCategoryEntity = factCategoryRepository.findFactCategoryEntitiesById(numberData);
             if (factCategoryEntity != null) {
                 factCategoryRepository.delete(factCategoryRepository.getFactCategoryByFactEntity(factRepository.findById(numberData).get()));
 
-                NumberEntity delNumber = factRepository.findById(numberData).get().getNumber();
+                Numbeer delNumber = factRepository.findById(numberData).get().getNumber();
                 factRepository.deleteById(numberData);
 
                 long numId = factCategoryEntity.getFact().getNumber().getId();
@@ -101,7 +101,7 @@ public class FactController {
 
         try {
 
-            FactCategoryEntity factCategoryEntity = factCategoryRepository.findFactCategoryEntitiesById(factId);
+            FactCategory factCategoryEntity = factCategoryRepository.findFactCategoryEntitiesById(factId);
 
             if (factCategoryEntity == null) {
                 return ResponseEntity.badRequest().body("Fact not found for the given ID.");
