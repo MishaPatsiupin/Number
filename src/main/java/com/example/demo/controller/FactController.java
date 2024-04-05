@@ -97,10 +97,10 @@ public class FactController {
                                           @RequestParam(value = "type", defaultValue = "nothing")
                                           @Pattern(regexp = "^(year|math|trivia)$") String type,
                                           @RequestParam(value = "fact", defaultValue = "it's a boring number")
-                                          @Pattern(regexp = "[A-Za-z0-9\\s.,;!?\"'-]+") String newFact) {
+                                          @Pattern(regexp = "[A-Za-z0-9\\s.,;!?\"'-]+") String newFact,
+                                          @RequestParam(value = "author", required = false) String author) {
 
         try {
-
             FactCategory factCategoryEntity = factCategoryRepository.findFactCategoryEntitiesById(factId);
 
             if (factCategoryEntity == null) {
@@ -109,12 +109,18 @@ public class FactController {
 
             if (!type.equals("nothing") && !factCategoryEntity.getCategory().getName().equals(type)) {
                 factCategoryEntity.setCategory(categoryRepository.findCategoryByName(type));
-                factCategoryRepository.save(factCategoryEntity);
             }
+
             if (factCategoryEntity.getFact().getNumber().getNumberData() != number.longValue()) {
                 factCategoryEntity.getFact().setNumber(numberService.createNumber(number.longValue()));
-                factCategoryRepository.save(factCategoryEntity);
             }
+
+            if (author != null && !author.equals(factCategoryEntity.getAuthor())) {
+                factCategoryEntity.setAuthor(author);
+            }
+
+            factCategoryRepository.save(factCategoryEntity);
+
             return ResponseEntity.ok("Update fact: " + factCategoryRepository.findFactCategoryEntitiesById(factId));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred while updating the fact.");

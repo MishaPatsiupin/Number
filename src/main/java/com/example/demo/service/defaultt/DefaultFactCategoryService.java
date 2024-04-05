@@ -103,7 +103,8 @@ public class DefaultFactCategoryService implements FactCategoryService {
 
             for (int i = 0; i < allFactByNumber.size(); i++) {
                 if (allFactByNumber.get(i).getCategory().getId() == categoryRepository.findIdByName(type)) {
-                    responseS.add("Fact id:" + allFactByNumber.get(i).getFact().getId() + ", " + number + " " + allFactByNumber.get(i).getFact().getDescription());
+                    String responseAuthor = " Author: " + allFactByNumber.get(i).getAuthor();
+                    responseS.add("Fact id:" + allFactByNumber.get(i).getFact().getId() + ", " + number + " " + allFactByNumber.get(i).getFact().getDescription() + responseAuthor);
                 }
             }
             if (responseS.isEmpty()) {
@@ -136,7 +137,14 @@ public class DefaultFactCategoryService implements FactCategoryService {
         ResponseEntity<List<String>> facts = this.getFactsByFactAndCategory(numberS, type);
         ResponseEntity<String> fact = null;
         if (facts.getBody().size() > 1) {
-            int factRandom = random.nextInt(facts.getBody().size());
+            int sizeFact = 0;
+            for(int i = 0; i < facts.getBody().size(); i++){
+                if(facts.getBody().get(i).equals("<----------------------------------------------------------------->")){
+                    sizeFact = i;
+                }
+            }
+            int factRandom = random.nextInt(sizeFact);
+
             fact = ResponseEntity.ok().body(facts.getBody().get(factRandom));
         } else {
             return ResponseEntity.ok().body(facts.getBody().get(0));
