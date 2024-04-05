@@ -91,14 +91,19 @@ public class FactController {
     public ResponseEntity<String> updFact(@RequestParam(value = "id")
                                           @Pattern(regexp = "\\d+")
                                           @NumberFormat(style = NumberFormat.Style.NUMBER) long factId,
+
                                           @RequestParam(value = "number", required = false)
                                           @Pattern(regexp = "\\d+")
                                           @NumberFormat(style = NumberFormat.Style.NUMBER) Long number,
-                                          @RequestParam(value = "type", defaultValue = "nothing")
+
+                                          @RequestParam(value = "type", required = false)
                                           @Pattern(regexp = "^(year|math|trivia)$") String type,
-                                          @RequestParam(value = "fact", defaultValue = "it's a boring number")
+
+                                          @RequestParam(value = "fact", required = false)
                                           @Pattern(regexp = "[A-Za-z0-9\\s.,;!?\"'-]+") String newFact,
-                                          @RequestParam(value = "author", required = false) String author) {
+
+                                          @RequestParam(value = "author", required = false)
+                                          @Pattern(regexp = "[A-Za-z0-9\\s.,;!?\"'-]+") String author) {
 
         try {
             FactCategory factCategoryEntity = factCategoryRepository.findFactCategoryEntitiesById(factId);
@@ -107,16 +112,22 @@ public class FactController {
                 return ResponseEntity.badRequest().body("Fact not found for the given ID.");
             }
 
-            if (!type.equals("nothing") && !factCategoryEntity.getCategory().getName().equals(type)) {
-                factCategoryEntity.setCategory(categoryRepository.findCategoryByName(type));
-            }
-
-            if (factCategoryEntity.getFact().getNumber().getNumberData() != number.longValue()) {
+            if (number != null && factCategoryEntity.getFact().getNumber().getNumberData() != number.longValue()) {
                 factCategoryEntity.getFact().setNumber(numberService.createNumber(number.longValue()));
             }
 
-            if (author != null && !author.equals(factCategoryEntity.getAuthor())) {
-                factCategoryEntity.setAuthor(author);
+            if (type != null && !factCategoryEntity.getCategory().getName().equals(type)) {
+                factCategoryEntity.setCategory(categoryRepository.findCategoryByName(type));
+            }
+
+
+            if (newFact != null && !factCategoryEntity.getFact().getDescription().equals(newFact)){
+                factCategoryEntity.getFact().setDescription(newFact);
+            }
+
+            if (author != null && (!author.equals(factCategoryEntity.getAuthor()))){
+                    factCategoryEntity.setAuthor(author);
+
             }
 
             factCategoryRepository.save(factCategoryEntity);

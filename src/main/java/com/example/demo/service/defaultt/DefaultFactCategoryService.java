@@ -72,13 +72,14 @@ public class DefaultFactCategoryService implements FactCategoryService {
 
 
     @Override
-    public void updateFactCategory(long id, long catId, long facId) {
+    public void updateFactCategory(long id, long catId, long facId, String author) {
         FactCategory factCategoryEntity = getFactCategoryEntityById(id);
         if (factCategoryEntity != null) {
             Category categoryEntity = getCategoryEntityById(catId);
             Fact factEntity = getFactEntityById(facId);
             factCategoryEntity.setCategory(categoryEntity);
             factCategoryEntity.setFact(factEntity);
+            factCategoryEntity.setAuthor(author);
             factCategoryRepository.save(factCategoryEntity);
         }
     }

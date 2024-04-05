@@ -10,7 +10,7 @@ public interface FactCategoryService {
 
     void deleteFactCategory(long id);
 
-    void updateFactCategory(long id, long catId, long facId);
+    void updateFactCategory(long id, long catId, long facId, String author) ;
 
     ResponseEntity<List<String>> getFactsByFactAndCategory(String numberS, String type);
     ResponseEntity<String> getFactByFactAndCategory(String numberS, String type);
