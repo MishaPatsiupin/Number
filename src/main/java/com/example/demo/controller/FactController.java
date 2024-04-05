@@ -34,20 +34,26 @@ public class FactController {
     @PostMapping(value = "/fact/add")
     public ResponseEntity<String> addFact(@RequestParam(value = "number")
                                           @Pattern(regexp = "\\d+")
-                                          @NumberFormat(style = NumberFormat.Style.NUMBER) long numberData,
+                                          @NumberFormat(style = NumberFormat.Style.NUMBER) Long number,
+
                                           @RequestParam(value = "type", defaultValue = "trivia")
                                           @Pattern(regexp = "^(year|math|trivia)$") String type,
+
                                           @RequestParam(value = "fact", defaultValue = "it's a boring number")
-                                          @Pattern(regexp = "[A-Za-z0-9\\s.,;!?\"'-]+") String newFact) {
+                                          @Pattern(regexp = "[A-Za-z0-9\\s.,;!?\"'-]+") String newFact,
+
+                                          @RequestParam(value = "author", defaultValue = "User")
+                                          @Pattern(regexp = "[A-Za-z0-9\\s.,;!?\"'-]+") String author) {
         try {
 
-            numberService.addNumber(numberData);
+            numberService.addNumber(number.longValue());
             Category existingCategory = categoryRepository.findCategoryByName(type);
-            Fact createdFact = factService.createFact(numberData, newFact);
+            Fact createdFact = factService.createFact(number.longValue(), newFact);
 
             FactCategory factCategory = new FactCategory();
             factCategory.setCategory(existingCategory);
             factCategory.setFact(createdFact);
+            factCategory.setAuthor(author);
             factCategoryRepository.save(factCategory);
 
             return ResponseEntity.ok("Fact added successfully with ID: " + createdFact.getId());
@@ -121,13 +127,12 @@ public class FactController {
             }
 
 
-            if (newFact != null && !factCategoryEntity.getFact().getDescription().equals(newFact)){
+            if (newFact != null && !factCategoryEntity.getFact().getDescription().equals(newFact)) {
                 factCategoryEntity.getFact().setDescription(newFact);
             }
 
-            if (author != null && (!author.equals(factCategoryEntity.getAuthor()))){
-                    factCategoryEntity.setAuthor(author);
-
+            if (author != null && (!author.equals(factCategoryEntity.getAuthor()))) {
+                factCategoryEntity.setAuthor(author);
             }
 
             factCategoryRepository.save(factCategoryEntity);
