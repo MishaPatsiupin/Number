@@ -4,6 +4,7 @@ import com.example.demo.entity.Category;
 import com.example.demo.entity.FactCategory;
 import com.example.demo.entity.Fact;
 import com.example.demo.entity.Numbeer;
+import com.example.demo.exception.ExceptionHandle;
 import com.example.demo.repository.CategoryRepository;
 import com.example.demo.repository.FactCategoryRepository;
 import com.example.demo.repository.FactRepository;
@@ -30,6 +31,7 @@ public class FactController {
   private final FactCategoryRepository factCategoryRepository;
   private final FactRepository factRepository;
   private final FactCategoryService factCategoryService;
+    private final ExceptionHandle exceptionHandle;
 
   @PostMapping(value = "/fact/add")
   public ResponseEntity<String> addFact(
@@ -45,7 +47,7 @@ public class FactController {
           String newFact,
       @RequestParam(value = "author", defaultValue = "User")
           @Pattern(regexp = "[A-Za-z0-9\\s.,;!?\"'-]+")
-          String author) {
+          String author) throws IllegalAccessException {
     try {
 
       numberService.addNumber(number.longValue());
@@ -60,7 +62,8 @@ public class FactController {
 
       return ResponseEntity.ok("Fact added successfully with ID: " + createdFact.getId());
     } catch (NumberFormatException e) {
-      return ResponseEntity.badRequest().body("Invalid number/fact format");
+        throw new IllegalAccessException("Invalid number/fact format");
+      //return ResponseEntity.badRequest().body("Invalid number/fact format");
     }
   }
 
@@ -69,7 +72,7 @@ public class FactController {
       @RequestParam(value = "id")
           @Pattern(regexp = "\\d+")
           @NumberFormat(style = NumberFormat.Style.NUMBER)
-          String number) {
+          String number) throws IllegalAccessException {
 
     try {
       long numberData = Long.parseLong(number);
@@ -96,14 +99,14 @@ public class FactController {
           return ResponseEntity.ok().body("Fact delete successfully.");
         } else {
           numberRepository.delete(delNumber);
-
           return ResponseEntity.ok().body("Fact delete successfully.");
         }
       }
 
       return ResponseEntity.ok("Fact not found.");
     } catch (NumberFormatException e) {
-      return ResponseEntity.badRequest().body("Invalid id format");
+        throw new IllegalAccessException("Invalid id format");
+      //return ResponseEntity.badRequest().body("Invalid id format");
     }
   }
 
@@ -123,7 +126,7 @@ public class FactController {
           String newFact,
       @RequestParam(value = "author", required = false)
           @Pattern(regexp = "[A-Za-z0-9\\s.,;!?\"'-]+")
-          String author) {
+          String author) throws IllegalAccessException {
 
     try {
       FactCategory factCategoryEntity = factCategoryRepository.findFactCategoryEntitiesById(factId);
@@ -163,8 +166,9 @@ public class FactController {
 
       return ResponseEntity.ok("Update fact.");
     } catch (Exception e) {
-      return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-          .body("An error occurred while updating the fact.");
+        throw new IllegalAccessException("An error occurred while updating the fact.");
+//      return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+//          .body("An error occurred while updating the fact.");
     }
   }
 }

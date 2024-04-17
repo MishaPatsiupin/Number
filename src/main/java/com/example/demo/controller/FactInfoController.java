@@ -8,7 +8,6 @@ import com.example.demo.service.FactCategoryService;
 import com.example.demo.service.FactService;
 import com.example.demo.service.NumberService;
 import com.example.demo.service.defaultt.DefaultNumberService;
-import jakarta.validation.ConstraintViolationException;
 import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -16,7 +15,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,6 +28,8 @@ public class FactInfoController {
   CategoryRepository categoryRepository;
   FactCategoryService factCategoryService;
   FactService factService;
+
+
 
   @GetMapping(value = "/info")
   @Validated
@@ -56,35 +56,18 @@ public class FactInfoController {
     return new ResponseEntity<>(factCategoryService.getFactsByFactAndCategory(numberS, type), HttpStatus.OK);
   }
 
-  @GetMapping(value = "/info/cat", produces = "application/json")
+  @GetMapping(value = "/info/all/number", produces = "application/json")
   @Validated
-  public ResponseEntity<List<String>> getInfoCat(
+  public ResponseEntity<List<List<FactCategory>>> getInfoCat(
           @RequestParam(value = "number", defaultValue = "random") @Pattern(regexp = "\\d+|^(random)")
           String numberS) {
 
-    List<String> response = new ArrayList<>();
-for (int i = 0; i < 3; i++){
-response.add("In category " + DefaultNumberService.Type.values()[i].name().toLowerCase() + ", facts - " + factCategoryService.getFactsByFactAndCategory(numberS, DefaultNumberService.Type.values()[i].name().toLowerCase()).size());
-}
+    List<List<FactCategory>> response = new ArrayList<>();
+    for (int i = 0; i < 3; i++){
+        response.add(factCategoryService.getFactsByFactAndCategory(numberS, DefaultNumberService.Type.values()[i].name().toLowerCase()));
+    }
 
     return new ResponseEntity<>(response, HttpStatus.OK);
   }
 
-  @GetMapping(value = "/**")
-  public ResponseEntity<String> defaultMethod() {
-    return new ResponseEntity<>(
-        "Please specify a valid path. For example, http://localhost:8080/info?number=5&type=math",
-        HttpStatus.BAD_REQUEST);
-  }
-
-  @ExceptionHandler(IOException.class)
-  public ResponseEntity<Object> handleIOException() {
-    return new ResponseEntity<>(
-        "STATUS: 500. Internal Server Error", HttpStatus.INTERNAL_SERVER_ERROR);
-  }
-
-  @ExceptionHandler(ConstraintViolationException.class)
-  public ResponseEntity<String> handleConstraintViolation(ConstraintViolationException ex) {
-    return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
-  }
 }
