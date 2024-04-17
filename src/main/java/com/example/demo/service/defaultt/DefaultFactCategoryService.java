@@ -9,6 +9,7 @@ import com.example.demo.repository.FactCategoryRepository;
 import com.example.demo.repository.FactRepository;
 import com.example.demo.repository.NumberRepository;
 import com.example.demo.service.FactCategoryService;
+import com.example.demo.utils.SimpleCache;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,12 +23,23 @@ public class DefaultFactCategoryService implements FactCategoryService {
   private final CategoryRepository categoryRepository;
   private final FactRepository factRepository;
   private final NumberRepository numberRepository;
+  private final SimpleCache simpleCache;
   private final SecureRandom random = new SecureRandom();
 
   private Category getCategoryEntityById(long catId) {
     // Логика получения Category по идентификатору
     Optional<Category> categoryOptional = categoryRepository.findById(catId);
     return categoryOptional.orElse(null);
+  }
+
+  public void updateCache(String key, List<FactCategory> newValue){
+    simpleCache.updateCache(key,newValue);
+  }
+  public void deleteCache (String key){
+    simpleCache.deleteCache(key);
+  }
+  public void clearCashe(){
+    simpleCache.clearAllCashe();
   }
 
   private Fact getFactEntityById(long facId) {
@@ -47,11 +59,13 @@ public class DefaultFactCategoryService implements FactCategoryService {
       FactCategoryRepository factCategoryRepository,
       CategoryRepository categoryRepository,
       FactRepository factRepository,
-      NumberRepository numberRepository) {
+      NumberRepository numberRepository,
+      SimpleCache simpleCache) {
     this.factCategoryRepository = factCategoryRepository;
     this.categoryRepository = categoryRepository;
     this.factRepository = factRepository;
     this.numberRepository = numberRepository;
+    this.simpleCache = simpleCache;
   }
 
   @Override
@@ -97,8 +111,13 @@ public class DefaultFactCategoryService implements FactCategoryService {
       return Collections.emptyList();
     }
 
-    List<FactCategory> allFactByNumber;
-    allFactByNumber = factCategoryRepository.findFactCategoriesByNumberDataAndCategoryName(number, type);
+    String key = number + "_" + type;
+    List<FactCategory> allFactByNumber = simpleCache.getFromCache(key);
+
+    if (allFactByNumber == null) {
+      allFactByNumber = factCategoryRepository.findFactCategoriesByNumberDataAndCategoryName(number, type);
+      simpleCache.addToCache(key, allFactByNumber);
+    }
 
     return allFactByNumber;
   }

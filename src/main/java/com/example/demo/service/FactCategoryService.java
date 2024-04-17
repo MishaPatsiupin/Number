@@ -13,5 +13,8 @@ public interface FactCategoryService {
 
     public List<FactCategory> getFactsByFactAndCategory(String numberS, String type);
     public FactCategory getFactByFactAndCategory(String numberS, String type);
+    void updateCache(String key, List<FactCategory> newValue);
+    void deleteCache (String key);
+    public void clearCashe();
 
 }
