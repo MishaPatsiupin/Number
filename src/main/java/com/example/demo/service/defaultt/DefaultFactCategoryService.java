@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 import java.security.SecureRandom;
 import java.util.*;
 
+/** The type Default fact category service. */
 @Service
 public class DefaultFactCategoryService implements FactCategoryService {
 
@@ -35,15 +36,15 @@ public class DefaultFactCategoryService implements FactCategoryService {
     return categoryOptional.orElse(null);
   }
 
-  public void updateCache(String key, List<FactCategory> newValue){
-    simpleCache.updateCache(key,newValue);
+  public void updateCache(String key, List<FactCategory> newValue) {
+    simpleCache.updateCache(key, newValue);
     logger.info("Cache updated for key: {}", key);
   }
-  public void deleteCache (String key){
-    if (simpleCache.getFromCache(key) != null){
+
+  public void deleteCache(String key) {
+    if (simpleCache.getFromCache(key) != null) {
       simpleCache.deleteCache(key);
       logger.info("Cache deleted for key: {}", key);
-
     }
   }
 
@@ -59,6 +60,15 @@ public class DefaultFactCategoryService implements FactCategoryService {
     return factCategoryOptional.orElse(null);
   }
 
+  /**
+   * Instantiates a new Default fact category service.
+   *
+   * @param factCategoryRepository the fact category repository
+   * @param categoryRepository the category repository
+   * @param factRepository the fact repository
+   * @param numberRepository the number repository
+   * @param simpleCache the simple cache
+   */
   @Autowired
   public DefaultFactCategoryService(
       FactCategoryRepository factCategoryRepository,
@@ -124,12 +134,13 @@ public class DefaultFactCategoryService implements FactCategoryService {
     List<FactCategory> allFactByNumber = simpleCache.getFromCache(key);
 
     if (allFactByNumber == null) {
-      allFactByNumber = factCategoryRepository.findFactCategoriesByNumberDataAndCategoryName(number, type);
+      allFactByNumber =
+          factCategoryRepository.findFactCategoriesByNumberDataAndCategoryName(number, type);
       simpleCache.addToCache(key, allFactByNumber);
       logger.info("Data loaded from repository and added to cache. Key: {}", key);
     } else {
       logger.info("Data loaded from cache. Key: {}", key);
-}
+    }
 
     return allFactByNumber;
   }

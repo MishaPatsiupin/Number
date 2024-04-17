@@ -5,17 +5,70 @@ import org.springframework.http.ResponseEntity;
 
 import java.util.List;
 
+/** The interface Number service. */
 public interface NumberService {
-    ResponseEntity<String> addNumber(long numberData);
-    ResponseEntity<String> delNumber(String number);
-    long findIdByNumber(long numberData);
-    Numbeer createNumber(long numberData);
+  /**
+   * Add number response entity.
+   *
+   * @param numberData the number data
+   * @return the response entity
+   */
+  ResponseEntity<String> addNumber(long numberData);
 
-    Numbeer findNumber(long numberData);
+  /**
+   * Del number response entity.
+   *
+   * @param number the number
+   * @return the response entity
+   */
+  ResponseEntity<String> delNumber(String number);
 
-    void updateNumber(long id, long numberData);
+  /**
+   * Find id by number long.
+   *
+   * @param numberData the number data
+   * @return the long
+   */
+  long findIdByNumber(long numberData);
 
-    void deleteNumber(long id);
+  /**
+   * Create number numbeer.
+   *
+   * @param numberData the number data
+   * @return the numbeer
+   */
+  Numbeer createNumber(long numberData);
 
-    public String emplyNumber(List<String> responseS, long number, String type);
+  /**
+   * Find number numbeer.
+   *
+   * @param numberData the number data
+   * @return the numbeer
+   */
+  Numbeer findNumber(long numberData);
+
+  /**
+   * Update number.
+   *
+   * @param id the id
+   * @param numberData the number data
+   */
+  void updateNumber(long id, long numberData);
+
+  /**
+   * Delete number.
+   *
+   * @param id the id
+   */
+  void deleteNumber(long id);
+
+  /**
+   * Emply number string.
+   *
+   * @param responseS the response s
+   * @param number the number
+   * @param type the type
+   * @return the string
+   */
+  public String emplyNumber(List<String> responseS, long number, String type);
 }
