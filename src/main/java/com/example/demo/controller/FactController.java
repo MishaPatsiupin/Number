@@ -21,6 +21,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+/** The type Fact controller. */
 @Validated
 @RestController
 @AllArgsConstructor
@@ -34,24 +35,37 @@ public class FactController {
   private final FactCategoryService factCategoryService;
   private static final Logger logger = LoggerFactory.getLogger(FactController.class);
 
-    private void deleteCacheIfNeeded(boolean flagNumberChange, boolean flagTypeChange,
-                                     Long number, String type, FactCategory factCategoryEntity) {
-        if (flagNumberChange || flagTypeChange) {
-            if (flagNumberChange || !flagTypeChange) {
-                factCategoryService.deleteCache(number.toString() + "_"
-                        + factCategoryEntity.getCategory().getName());
-            }
-            if (!flagNumberChange || flagTypeChange) {
-                factCategoryService.deleteCache(factCategoryEntity.getFact().getNumber().getNumberData()
-                        + "_"
-                        + type);
-            }
-            if (flagNumberChange && flagTypeChange) {
-                factCategoryService.deleteCache(number.toString() + "_" + type);
-            }
-        }
+  private void deleteCacheIfNeeded(
+      boolean flagNumberChange,
+      boolean flagTypeChange,
+      Long number,
+      String type,
+      FactCategory factCategoryEntity) {
+    if (flagNumberChange || flagTypeChange) {
+      if (flagNumberChange || !flagTypeChange) {
+        factCategoryService.deleteCache(
+            number.toString() + "_" + factCategoryEntity.getCategory().getName());
+      }
+      if (!flagNumberChange || flagTypeChange) {
+        factCategoryService.deleteCache(
+            factCategoryEntity.getFact().getNumber().getNumberData() + "_" + type);
+      }
+      if (flagNumberChange && flagTypeChange) {
+        factCategoryService.deleteCache(number.toString() + "_" + type);
+      }
     }
+  }
 
+  /**
+   * Add fact response entity.
+   *
+   * @param number the number
+   * @param type the type
+   * @param newFact the new fact
+   * @param author the author
+   * @return the response entity
+   * @throws IllegalAccessException the illegal access exception
+   */
   @PostMapping(value = "/fact/add")
   public ResponseEntity<String> addFact(
       @RequestParam(value = "number")
@@ -89,6 +103,13 @@ public class FactController {
     }
   }
 
+  /**
+   * Del fact response entity.
+   *
+   * @param number the number
+   * @return the response entity
+   * @throws IllegalAccessException the illegal access exception
+   */
   @DeleteMapping(value = "/fact/delete")
   public ResponseEntity<String> delFact(
       @RequestParam(value = "id")
@@ -137,6 +158,17 @@ public class FactController {
     }
   }
 
+  /**
+   * Upd fact response entity.
+   *
+   * @param factId the fact id
+   * @param number the number
+   * @param type the type
+   * @param newFact the new fact
+   * @param author the author
+   * @return the response entity
+   * @throws IllegalAccessException the illegal access exception
+   */
   @PutMapping(value = "/fact/update")
   public ResponseEntity<String> updFact(
       @RequestParam(value = "id")
@@ -168,18 +200,17 @@ public class FactController {
               + "_"
               + factCategoryEntity.getCategory().getName());
 
-
       boolean flagNumberChange = false;
       if (number != null
           && factCategoryEntity.getFact().getNumber().getNumberData() != number.longValue()) {
         factCategoryEntity.getFact().setNumber(numberService.createNumber(number.longValue()));
-          flagNumberChange = true;
+        flagNumberChange = true;
       }
 
-        boolean flagTypeChange = false;
+      boolean flagTypeChange = false;
       if (type != null && !factCategoryEntity.getCategory().getName().equals(type)) {
         factCategoryEntity.setCategory(categoryRepository.findCategoryByName(type));
-          flagTypeChange = true;
+        flagTypeChange = true;
       }
 
       if (newFact != null && !factCategoryEntity.getFact().getDescription().equals(newFact)) {
@@ -190,7 +221,7 @@ public class FactController {
         factCategoryEntity.setAuthor(author);
       }
 
-        deleteCacheIfNeeded(flagNumberChange, flagTypeChange, number, type, factCategoryEntity);
+      deleteCacheIfNeeded(flagNumberChange, flagTypeChange, number, type, factCategoryEntity);
 
       factCategoryRepository.save(factCategoryEntity);
 
@@ -199,7 +230,6 @@ public class FactController {
     } catch (Exception e) {
       logger.error("An error occurred while updating the fact: {}", e.getMessage());
       throw new IllegalAccessException("An error occurred while updating the fact.");
-
     }
   }
 }

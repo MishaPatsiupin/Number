@@ -21,20 +21,40 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/** The type Fact info controller. */
 @Validated
 @RestController
 @AllArgsConstructor
 public class FactInfoController {
 
+  /** The Number service. */
   NumberService numberService;
+
+  /** The Number repository. */
   NumberRepository numberRepository;
+
+  /** The Category repository. */
   CategoryRepository categoryRepository;
+
+  /** The Fact category service. */
   FactCategoryService factCategoryService;
+
+  /** The Fact service. */
   FactService factService;
 
   private static final Logger logger = LoggerFactory.getLogger(FactInfoController.class);
+
+  /** The constant ERROR_MESSEGE_1. */
   public static final String ERROR_MESSEGE_1 = "Error accessing information: ";
 
+  /**
+   * Gets info one.
+   *
+   * @param numberS the number s
+   * @param type the type
+   * @return the info one
+   * @throws IllegalAccessException the illegal access exception
+   */
   @GetMapping(value = "/info")
   @Validated
   public ResponseEntity<FactCategory> getInfoOne(
@@ -42,60 +62,79 @@ public class FactInfoController {
           String numberS,
       @RequestParam(value = "type", defaultValue = "trivia")
           @Pattern(regexp = "^(year|math|trivia)$")
-          String type) throws IllegalAccessException {
+          String type)
+      throws IllegalAccessException {
 
-      try {
-          logger.info("GET /info called with parameters: number={}, type={}", numberS, type);
-          FactCategory factCategory = factCategoryService.getFactByFactAndCategory(numberS, type);
-          return new ResponseEntity<>(factCategory, HttpStatus.OK);
-      } catch (Exception e) {
-          String errorMessage = ERROR_MESSEGE_1 + e.getMessage();
-          logger.error(errorMessage);
-          throw new IllegalAccessException(errorMessage);
-      }
+    try {
+      logger.info("GET /info called with parameters: number={}, type={}", numberS, type);
+      FactCategory factCategory = factCategoryService.getFactByFactAndCategory(numberS, type);
+      return new ResponseEntity<>(factCategory, HttpStatus.OK);
+    } catch (Exception e) {
+      String errorMessage = ERROR_MESSEGE_1 + e.getMessage();
+      logger.error(errorMessage);
+      throw new IllegalAccessException(errorMessage);
+    }
   }
 
+  /**
+   * Gets info all.
+   *
+   * @param numberS the number s
+   * @param type the type
+   * @return the info all
+   * @throws IllegalAccessException the illegal access exception
+   */
   @GetMapping(value = "/info/all", produces = "application/json")
   @Validated
   public ResponseEntity<List<FactCategory>> getInfoAll(
-          @RequestParam(value = "number", defaultValue = "random") @Pattern(regexp = "\\d+|^(random)")
+      @RequestParam(value = "number", defaultValue = "random") @Pattern(regexp = "\\d+|^(random)")
           String numberS,
-          @RequestParam(value = "type", defaultValue = "trivia")
+      @RequestParam(value = "type", defaultValue = "trivia")
           @Pattern(regexp = "^(year|math|trivia)$")
-          String type) throws IllegalAccessException {
+          String type)
+      throws IllegalAccessException {
 
-      try {
-          logger.info("GET /info/all called with parameters: number={}, type={}", numberS, type);
-          List<FactCategory> factCategories = factCategoryService.getFactsByFactAndCategory(numberS, type);
-          return new ResponseEntity<>(factCategories, HttpStatus.OK);
-      } catch (Exception e) {
-          String errorMessage = ERROR_MESSEGE_1 + e.getMessage();
-          logger.error(errorMessage);
-          throw new IllegalAccessException(errorMessage);
-      }
+    try {
+      logger.info("GET /info/all called with parameters: number={}, type={}", numberS, type);
+      List<FactCategory> factCategories =
+          factCategoryService.getFactsByFactAndCategory(numberS, type);
+      return new ResponseEntity<>(factCategories, HttpStatus.OK);
+    } catch (Exception e) {
+      String errorMessage = ERROR_MESSEGE_1 + e.getMessage();
+      logger.error(errorMessage);
+      throw new IllegalAccessException(errorMessage);
+    }
   }
 
+  /**
+   * Gets info cat.
+   *
+   * @param numberS the number s
+   * @return the info cat
+   * @throws IllegalAccessException the illegal access exception
+   */
   @GetMapping(value = "/info/all/number", produces = "application/json")
   @Validated
   public ResponseEntity<List<List<FactCategory>>> getInfoCat(
-          @RequestParam(value = "number", defaultValue = "random") @Pattern(regexp = "\\d+|^(random)")
-          String numberS) throws IllegalAccessException {
+      @RequestParam(value = "number", defaultValue = "random") @Pattern(regexp = "\\d+|^(random)")
+          String numberS)
+      throws IllegalAccessException {
 
-      try {
-          logger.info("GET /info/all/number called with parameter: number={}", numberS);
+    try {
+      logger.info("GET /info/all/number called with parameter: number={}", numberS);
 
-          List<List<FactCategory>> response = new ArrayList<>();
-          for (int i = 0; i < 3; i++) {
-              response.add(
-                      factCategoryService.getFactsByFactAndCategory(
-                              numberS, DefaultNumberService.Type.values()[i].name().toLowerCase()));
-          }
-
-          return new ResponseEntity<>(response, HttpStatus.OK);
-      } catch (Exception e) {
-          String errorMessage = ERROR_MESSEGE_1 + e.getMessage();
-          logger.error(errorMessage);
-          throw new IllegalAccessException(errorMessage);
+      List<List<FactCategory>> response = new ArrayList<>();
+      for (int i = 0; i < 3; i++) {
+        response.add(
+            factCategoryService.getFactsByFactAndCategory(
+                numberS, DefaultNumberService.Type.values()[i].name().toLowerCase()));
       }
+
+      return new ResponseEntity<>(response, HttpStatus.OK);
+    } catch (Exception e) {
+      String errorMessage = ERROR_MESSEGE_1 + e.getMessage();
+      logger.error(errorMessage);
+      throw new IllegalAccessException(errorMessage);
+    }
   }
 }

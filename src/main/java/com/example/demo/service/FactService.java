@@ -3,12 +3,38 @@ package com.example.demo.service;
 import com.example.demo.entity.Fact;
 import org.springframework.http.ResponseEntity;
 
+/** The interface Fact service. */
 public interface FactService {
-    public ResponseEntity<String> deleteFact(String number);
-    Fact createFact(long number, String description);
+  /**
+   * Delete fact response entity.
+   *
+   * @param number the number
+   * @return the response entity
+   */
+  public ResponseEntity<String> deleteFact(String number);
 
-    Fact findFact (String description);
+  /**
+   * Create fact fact.
+   *
+   * @param number the number
+   * @param description the description
+   * @return the fact
+   */
+  Fact createFact(long number, String description);
 
-    Fact getFactByNumberId(long number);
+  /**
+   * Find fact fact.
+   *
+   * @param description the description
+   * @return the fact
+   */
+  Fact findFact(String description);
 
+  /**
+   * Gets fact by number id.
+   *
+   * @param number the number
+   * @return the fact by number id
+   */
+  Fact getFactByNumberId(long number);
 }
