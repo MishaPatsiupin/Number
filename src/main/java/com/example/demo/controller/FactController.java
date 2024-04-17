@@ -11,10 +11,12 @@ import com.example.demo.repository.NumberRepository;
 import com.example.demo.service.FactCategoryService;
 import com.example.demo.service.FactService;
 import com.example.demo.service.NumberService;
+import jakarta.validation.constraints.Digits;
 import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.format.annotation.NumberFormat;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -30,11 +32,30 @@ public class FactController {
   private final FactCategoryRepository factCategoryRepository;
   private final FactRepository factRepository;
   private final FactCategoryService factCategoryService;
+  private static final Logger logger = LoggerFactory.getLogger(FactController.class);
+
+    private void deleteCacheIfNeeded(boolean flagNumberChange, boolean flagTypeChange,
+                                     Long number, String type, FactCategory factCategoryEntity) {
+        if (flagNumberChange || flagTypeChange) {
+            if (flagNumberChange || !flagTypeChange) {
+                factCategoryService.deleteCache(number.toString() + "_"
+                        + factCategoryEntity.getCategory().getName());
+            }
+            if (!flagNumberChange || flagTypeChange) {
+                factCategoryService.deleteCache(factCategoryEntity.getFact().getNumber().getNumberData()
+                        + "_"
+                        + type);
+            }
+            if (flagNumberChange && flagTypeChange) {
+                factCategoryService.deleteCache(number.toString() + "_" + type);
+            }
+        }
+    }
 
   @PostMapping(value = "/fact/add")
   public ResponseEntity<String> addFact(
       @RequestParam(value = "number")
-          @Pattern(regexp = "\\d+")
+          @Digits(integer = Integer.MAX_VALUE, fraction = 0, message = "Number must be an integer")
           @NumberFormat(style = NumberFormat.Style.NUMBER)
           Long number,
       @RequestParam(value = "type", defaultValue = "trivia")
@@ -45,7 +66,9 @@ public class FactController {
           String newFact,
       @RequestParam(value = "author", defaultValue = "User")
           @Pattern(regexp = "[A-Za-z0-9\\s.,;!?\"'-]+")
-          String author) {
+          String author)
+      throws IllegalAccessException {
+
     try {
 
       numberService.addNumber(number.longValue());
@@ -58,9 +81,11 @@ public class FactController {
       factCategory.setAuthor(author);
       factCategoryRepository.save(factCategory);
 
+      logger.info("Fact added successfully with ID: {}", createdFact.getId());
       return ResponseEntity.ok("Fact added successfully with ID: " + createdFact.getId());
     } catch (NumberFormatException e) {
-      return ResponseEntity.badRequest().body("Invalid number/fact format");
+      logger.error("Invalid number/fact format: {}", e.getMessage());
+      throw new IllegalAccessException("Invalid number/fact format");
     }
   }
 
@@ -69,7 +94,8 @@ public class FactController {
       @RequestParam(value = "id")
           @Pattern(regexp = "\\d+")
           @NumberFormat(style = NumberFormat.Style.NUMBER)
-          String number) {
+          String number)
+      throws IllegalAccessException {
 
     try {
       long numberData = Long.parseLong(number);
@@ -91,30 +117,34 @@ public class FactController {
         factRepository.deleteById(numberData);
 
         long numId = factCategoryEntity.getFact().getNumber().getId();
+        String messege = "Fact delete successfully.";
         if (factRepository.countByNumberId(numId) > 0) {
           // Если список не пустой, значит есть соответствующий факт
-          return ResponseEntity.ok().body("Fact delete successfully.");
+          logger.info(messege);
+          return ResponseEntity.ok().body(messege);
         } else {
           numberRepository.delete(delNumber);
-
-          return ResponseEntity.ok().body("Fact delete successfully.");
+          logger.info(messege);
+          return ResponseEntity.ok().body(messege);
         }
       }
 
+      logger.warn("Fact not found.");
       return ResponseEntity.ok("Fact not found.");
     } catch (NumberFormatException e) {
-      return ResponseEntity.badRequest().body("Invalid id format");
+      logger.error("Invalid id format: {}", e.getMessage());
+      throw new IllegalAccessException("Invalid id format");
     }
   }
 
   @PutMapping(value = "/fact/update")
   public ResponseEntity<String> updFact(
       @RequestParam(value = "id")
-          @Pattern(regexp = "\\d+")
+          @Digits(integer = Integer.MAX_VALUE, fraction = 0, message = "Number must be an integer")
           @NumberFormat(style = NumberFormat.Style.NUMBER)
           long factId,
       @RequestParam(value = "number", required = false)
-          @Pattern(regexp = "\\d+")
+          @Digits(integer = Integer.MAX_VALUE, fraction = 0, message = "Number must be an integer")
           @NumberFormat(style = NumberFormat.Style.NUMBER)
           Long number,
       @RequestParam(value = "type", required = false) @Pattern(regexp = "^(year|math|trivia)$")
@@ -123,7 +153,8 @@ public class FactController {
           String newFact,
       @RequestParam(value = "author", required = false)
           @Pattern(regexp = "[A-Za-z0-9\\s.,;!?\"'-]+")
-          String author) {
+          String author)
+      throws IllegalAccessException {
 
     try {
       FactCategory factCategoryEntity = factCategoryRepository.findFactCategoryEntitiesById(factId);
@@ -137,13 +168,18 @@ public class FactController {
               + "_"
               + factCategoryEntity.getCategory().getName());
 
+
+      boolean flagNumberChange = false;
       if (number != null
           && factCategoryEntity.getFact().getNumber().getNumberData() != number.longValue()) {
         factCategoryEntity.getFact().setNumber(numberService.createNumber(number.longValue()));
+          flagNumberChange = true;
       }
 
+        boolean flagTypeChange = false;
       if (type != null && !factCategoryEntity.getCategory().getName().equals(type)) {
         factCategoryEntity.setCategory(categoryRepository.findCategoryByName(type));
+          flagTypeChange = true;
       }
 
       if (newFact != null && !factCategoryEntity.getFact().getDescription().equals(newFact)) {
@@ -154,17 +190,16 @@ public class FactController {
         factCategoryEntity.setAuthor(author);
       }
 
+        deleteCacheIfNeeded(flagNumberChange, flagTypeChange, number, type, factCategoryEntity);
+
       factCategoryRepository.save(factCategoryEntity);
 
-      factCategoryService.deleteCache(
-          factCategoryEntity.getFact().getNumber().getNumberData()
-              + "_"
-              + factCategoryEntity.getCategory().getName());
-
+      logger.info("Update fact.");
       return ResponseEntity.ok("Update fact.");
     } catch (Exception e) {
-      return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-          .body("An error occurred while updating the fact.");
+      logger.error("An error occurred while updating the fact: {}", e.getMessage());
+      throw new IllegalAccessException("An error occurred while updating the fact.");
+
     }
   }
 }

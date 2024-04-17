@@ -8,7 +8,6 @@ import com.example.demo.service.FactCategoryService;
 import com.example.demo.service.FactService;
 import com.example.demo.service.NumberService;
 import com.example.demo.service.defaultt.DefaultNumberService;
-import jakarta.validation.ConstraintViolationException;
 import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -16,9 +15,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @Validated
 @RestController
@@ -31,6 +32,9 @@ public class FactInfoController {
   FactCategoryService factCategoryService;
   FactService factService;
 
+  private static final Logger logger = LoggerFactory.getLogger(FactInfoController.class);
+  public static final String ERROR_MESSEGE_1 = "Error accessing information: ";
+
   @GetMapping(value = "/info")
   @Validated
   public ResponseEntity<FactCategory> getInfoOne(
@@ -38,53 +42,60 @@ public class FactInfoController {
           String numberS,
       @RequestParam(value = "type", defaultValue = "trivia")
           @Pattern(regexp = "^(year|math|trivia)$")
-          String type) {
+          String type) throws IllegalAccessException {
 
-    return new ResponseEntity<>(
-        factCategoryService.getFactByFactAndCategory(numberS, type), HttpStatus.OK);
+      try {
+          logger.info("GET /info called with parameters: number={}, type={}", numberS, type);
+          FactCategory factCategory = factCategoryService.getFactByFactAndCategory(numberS, type);
+          return new ResponseEntity<>(factCategory, HttpStatus.OK);
+      } catch (Exception e) {
+          String errorMessage = ERROR_MESSEGE_1 + e.getMessage();
+          logger.error(errorMessage);
+          throw new IllegalAccessException(errorMessage);
+      }
   }
 
   @GetMapping(value = "/info/all", produces = "application/json")
   @Validated
   public ResponseEntity<List<FactCategory>> getInfoAll(
-      @RequestParam(value = "number", defaultValue = "random") @Pattern(regexp = "\\d+|^(random)")
-          String numberS,
-      @RequestParam(value = "type", defaultValue = "trivia")
-          @Pattern(regexp = "^(year|math|trivia)$")
-          String type) {
-
-    return new ResponseEntity<>(factCategoryService.getFactsByFactAndCategory(numberS, type), HttpStatus.OK);
-  }
-
-  @GetMapping(value = "/info/cat", produces = "application/json")
-  @Validated
-  public ResponseEntity<List<String>> getInfoCat(
           @RequestParam(value = "number", defaultValue = "random") @Pattern(regexp = "\\d+|^(random)")
-          String numberS) {
+          String numberS,
+          @RequestParam(value = "type", defaultValue = "trivia")
+          @Pattern(regexp = "^(year|math|trivia)$")
+          String type) throws IllegalAccessException {
 
-    List<String> response = new ArrayList<>();
-for (int i = 0; i < 3; i++){
-response.add("In category " + DefaultNumberService.Type.values()[i].name().toLowerCase() + ", facts - " + factCategoryService.getFactsByFactAndCategory(numberS, DefaultNumberService.Type.values()[i].name().toLowerCase()).size());
-}
-
-    return new ResponseEntity<>(response, HttpStatus.OK);
+      try {
+          logger.info("GET /info/all called with parameters: number={}, type={}", numberS, type);
+          List<FactCategory> factCategories = factCategoryService.getFactsByFactAndCategory(numberS, type);
+          return new ResponseEntity<>(factCategories, HttpStatus.OK);
+      } catch (Exception e) {
+          String errorMessage = ERROR_MESSEGE_1 + e.getMessage();
+          logger.error(errorMessage);
+          throw new IllegalAccessException(errorMessage);
+      }
   }
 
-  @GetMapping(value = "/**")
-  public ResponseEntity<String> defaultMethod() {
-    return new ResponseEntity<>(
-        "Please specify a valid path. For example, http://localhost:8080/info?number=5&type=math",
-        HttpStatus.BAD_REQUEST);
-  }
+  @GetMapping(value = "/info/all/number", produces = "application/json")
+  @Validated
+  public ResponseEntity<List<List<FactCategory>>> getInfoCat(
+          @RequestParam(value = "number", defaultValue = "random") @Pattern(regexp = "\\d+|^(random)")
+          String numberS) throws IllegalAccessException {
 
-  @ExceptionHandler(IOException.class)
-  public ResponseEntity<Object> handleIOException() {
-    return new ResponseEntity<>(
-        "STATUS: 500. Internal Server Error", HttpStatus.INTERNAL_SERVER_ERROR);
-  }
+      try {
+          logger.info("GET /info/all/number called with parameter: number={}", numberS);
 
-  @ExceptionHandler(ConstraintViolationException.class)
-  public ResponseEntity<String> handleConstraintViolation(ConstraintViolationException ex) {
-    return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
+          List<List<FactCategory>> response = new ArrayList<>();
+          for (int i = 0; i < 3; i++) {
+              response.add(
+                      factCategoryService.getFactsByFactAndCategory(
+                              numberS, DefaultNumberService.Type.values()[i].name().toLowerCase()));
+          }
+
+          return new ResponseEntity<>(response, HttpStatus.OK);
+      } catch (Exception e) {
+          String errorMessage = ERROR_MESSEGE_1 + e.getMessage();
+          logger.error(errorMessage);
+          throw new IllegalAccessException(errorMessage);
+      }
   }
 }
