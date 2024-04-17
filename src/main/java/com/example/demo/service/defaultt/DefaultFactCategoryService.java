@@ -1,5 +1,7 @@
 package com.example.demo.service.defaultt;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import com.example.demo.entity.Category;
 import com.example.demo.entity.Fact;
 import com.example.demo.entity.FactCategory;
@@ -19,6 +21,7 @@ import java.util.*;
 @Service
 public class DefaultFactCategoryService implements FactCategoryService {
 
+  private final Logger logger = LoggerFactory.getLogger(DefaultFactCategoryService.class);
   private final FactCategoryRepository factCategoryRepository;
   private final CategoryRepository categoryRepository;
   private final FactRepository factRepository;
@@ -34,12 +37,18 @@ public class DefaultFactCategoryService implements FactCategoryService {
 
   public void updateCache(String key, List<FactCategory> newValue){
     simpleCache.updateCache(key,newValue);
+    logger.info("Cache updated for key: {}", key);
   }
   public void deleteCache (String key){
-    simpleCache.deleteCache(key);
+    if (simpleCache.getFromCache(key) != null){
+      simpleCache.deleteCache(key);
+      logger.info("Cache deleted for key: {}", key);
+
+    }
   }
-  public void clearCashe(){
+  public void clearCaсhe(){
     simpleCache.clearAllCashe();
+    logger.info("All caches cleared");
   }
 
   private Fact getFactEntityById(long facId) {
@@ -82,6 +91,7 @@ public class DefaultFactCategoryService implements FactCategoryService {
   @Override
   public void deleteFactCategory(long id) {
     factCategoryRepository.deleteById(id);
+    logger.info("FactCategory deleted with id: {}", id);
   }
 
   @Override
@@ -94,6 +104,9 @@ public class DefaultFactCategoryService implements FactCategoryService {
       factCategoryEntity.setFact(factEntity);
       factCategoryEntity.setAuthor(author);
       factCategoryRepository.save(factCategoryEntity);
+      logger.info("FactCategory updated with id: {}", id);
+    } else {
+      logger.warn("FactCategory not found with id: {}", id);
     }
   }
 
@@ -117,7 +130,10 @@ public class DefaultFactCategoryService implements FactCategoryService {
     if (allFactByNumber == null) {
       allFactByNumber = factCategoryRepository.findFactCategoriesByNumberDataAndCategoryName(number, type);
       simpleCache.addToCache(key, allFactByNumber);
-    }
+      logger.info("Data loaded from repository and added to cache. Key: {}", key);
+    } else {
+      logger.info("Data loaded from cache. Key: {}", key);
+}
 
     return allFactByNumber;
   }
