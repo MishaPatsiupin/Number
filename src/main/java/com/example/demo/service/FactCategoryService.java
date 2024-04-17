@@ -1,7 +1,6 @@
 package com.example.demo.service;
 
 import com.example.demo.entity.FactCategory;
-import org.springframework.http.ResponseEntity;
 
 import java.util.List;
 
@@ -12,7 +11,10 @@ public interface FactCategoryService {
 
     void updateFactCategory(long id, long catId, long facId, String author) ;
 
-    ResponseEntity<List<String>> getFactsByFactAndCategory(String numberS, String type);
-    ResponseEntity<String> getFactByFactAndCategory(String numberS, String type);
+    public List<FactCategory> getFactsByFactAndCategory(String numberS, String type);
+    public FactCategory getFactByFactAndCategory(String numberS, String type);
+    void updateCache(String key, List<FactCategory> newValue);
+    void deleteCache (String key);
+    public void clearCashe();
 
 }

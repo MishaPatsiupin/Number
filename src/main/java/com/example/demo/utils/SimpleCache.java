@@ -1,37 +1,54 @@
 package com.example.demo.utils;
 
-import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
+import com.example.demo.entity.FactCategory;
+import lombok.Data;
+import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.stereotype.Component;
+
+
+@Component
+@Data
+@EnableScheduling
 public class SimpleCache {
 
-    private Map<String, Object> cache = new HashMap<>();
+  private static final int MAX_AMOUNT_OF_ELEMENTS = 3;
 
-    public void put(String key, Object value) {
-        cache.put(key, value);
-    }
+    private final Map<String, List<FactCategory>> cache =
+            new LinkedHashMap<>() {
+                @Override
+                protected boolean removeEldestEntry(Map.Entry<String, List<FactCategory>> eldest) {
+                    boolean remove = size() > MAX_AMOUNT_OF_ELEMENTS;
+                    if (remove) {
+                        super.removeEldestEntry(eldest);
+                    }
+                    return remove;
+                }
+            };
 
-    public Object get(String key) {
-        return cache.get(key);
-    }
+  public void updateCache(String key, List<FactCategory> newValue) {
+    cache.remove(key);
+    addToCache(key, newValue);
+  }
 
-    public void remove(String key) {
-        cache.remove(key);
-    }
+  public void deleteCache (String key){
+      if (!cache.get(key).isEmpty()){
+          cache.remove(key);
+      }
+  }
 
-    public void clear() {
-        cache.clear();
-    }
+  public void addToCache(String key, List<FactCategory> value) {
+    cache.put(key, value);
+  }
 
-    public int size() {
-        return cache.size();
-    }
+  public List<FactCategory> getFromCache(String key) {
+    return cache.get(key);
+  }
 
-
-    public Set<String> keySet() {
-        return cache.keySet();
-    }
-
+  public void clearAllCashe(){
+      cache.clear();
+  }
 }
-
