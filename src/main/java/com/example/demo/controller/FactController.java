@@ -137,7 +137,7 @@ public class FactController {
 
             factCategoryRepository.save(factCategoryEntity);
 
-            return ResponseEntity.ok("Update fact: " + factCategoryRepository.findFactCategoryEntitiesById(factId));
+            return ResponseEntity.ok("Update fact.");
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred while updating the fact.");
         }

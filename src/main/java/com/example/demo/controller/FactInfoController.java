@@ -2,7 +2,7 @@ package com.example.demo.controller;
 
 import com.example.demo.entity.FactCategory;
 import com.example.demo.repository.CategoryRepository;
-import com.example.demo.repository.FactCategoryRepository;
+
 import com.example.demo.repository.NumberRepository;
 import com.example.demo.service.FactCategoryService;
 import com.example.demo.service.FactService;
@@ -16,8 +16,6 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
-import java.security.SecureRandom;
-import java.util.ArrayList;
 import java.util.List;
 
 @Validated
@@ -30,55 +28,25 @@ public class FactInfoController {
     CategoryRepository categoryRepository;
     FactCategoryService factCategoryService;
     FactService factService;
-    private final FactCategoryRepository factCategoryRepository;
-    private final SecureRandom random = new SecureRandom ();
-
-
-    @GetMapping(value = "/test")
-    public ResponseEntity<List<String>> getTest(@RequestParam(value = "number", defaultValue = "random")
-                                                @Pattern(regexp = "\\d+|^(random)") String numberS,
-                                                @RequestParam(value = "type", defaultValue = "trivia")
-                                                @Pattern(regexp = "^(year|math|trivia)$") String type) {
-        long number = 0;
-        if (numberS.equals("random")) {
-            number = 500 - random.nextLong(1001);
-        } else {
-            number = Long.parseLong(numberS);
-        }
-
-        long numberId = numberRepository.findByNumberData(number).getId();//+
-
-        List<FactCategory> test;
-        test = factCategoryRepository.findFactCategoriesByFactId(numberId);//+
-
-
-        List<String> testS = new ArrayList<>();//а зачем оно надо, категорию давай
-        for (int i = 0; i < test.size(); i++) {
-            if (test.get(i).getCategory().getId() == categoryRepository.findIdByName(type)) {
-                testS.add("Fact id:" + test.get(i).getFact().getId() + ", " + number + " " + test.get(i).getFact().getDescription());
-            }
-
-        }
-
-        return ResponseEntity.ok(testS);
-    }
 
     @GetMapping(value = "/info")
-    public ResponseEntity<String> getInfoOne(@RequestParam(value = "number", defaultValue = "random")
+    @Validated
+    public ResponseEntity<FactCategory> getInfoOne(@RequestParam(value = "number", defaultValue = "random")
                                                  @Pattern(regexp = "\\d+|^(random)") String numberS,
                                              @RequestParam(value = "type", defaultValue = "trivia")
                                                  @Pattern(regexp = "^(year|math|trivia)$") String type){
 
-        return factCategoryService.getFactByFactAndCategory(numberS, type);
+        return new ResponseEntity<>(factCategoryService.getFactByFactAndCategory(numberS, type), HttpStatus.OK);
     }
 
     @GetMapping(value = "/info/all", produces = "application/json")
-    public ResponseEntity<List<String>> getInfoAll(@RequestParam(value = "number", defaultValue = "random")
+@Validated
+    public ResponseEntity<List<FactCategory>> getInfoAll(@RequestParam(value = "number", defaultValue = "random")
                                                    @Pattern(regexp = "\\d+|^(random)") String numberS,
                                                    @RequestParam(value = "type", defaultValue = "trivia")
                                                    @Pattern(regexp = "^(year|math|trivia)$") String type) {
 
-        return factCategoryService.getFactsByFactAndCategory(numberS, type);
+        return new ResponseEntity<>(factCategoryService.getFactsByFactAndCategory(numberS, type), HttpStatus.OK);
     }
 
 
