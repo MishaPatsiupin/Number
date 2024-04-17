@@ -46,10 +46,6 @@ public class DefaultFactCategoryService implements FactCategoryService {
 
     }
   }
-  public void clearCaсhe(){
-    simpleCache.clearAllCashe();
-    logger.info("All caches cleared");
-  }
 
   private Fact getFactEntityById(long facId) {
     // Логика получения Fact по идентификатору

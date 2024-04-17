@@ -1917,3 +1917,182 @@ java.lang.IllegalAccessException: An error occurred while updating the fact.
 2024-04-17 23:21:09 [SpringApplicationShutdownHook] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
 2024-04-17 23:21:09 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
 2024-04-17 23:21:10 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
+2024-04-17 23:21:20 [background-preinit] INFO  o.h.validator.internal.util.Version - HV000001: Hibernate Validator 8.0.1.Final
+2024-04-17 23:21:20 [main] INFO  com.example.demo.Demo1Application - Starting Demo1Application using Java 21.0.2 with PID 4960 (D:\Java\demo1\build\classes\java\main started by bear9 in D:\Java\demo1)
+2024-04-17 23:21:20 [main] INFO  com.example.demo.Demo1Application - No active profile set, falling back to 1 default profile: "default"
+2024-04-17 23:21:22 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2024-04-17 23:21:22 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 136 ms. Found 4 JPA repository interfaces.
+2024-04-17 23:21:23 [main] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
+2024-04-17 23:21:23 [main] INFO  o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8080"]
+2024-04-17 23:21:23 [main] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2024-04-17 23:21:23 [main] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.19]
+2024-04-17 23:21:23 [main] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2024-04-17 23:21:23 [main] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 2927 ms
+2024-04-17 23:21:23 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2024-04-17 23:21:24 [main] INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@2055833f
+2024-04-17 23:21:24 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2024-04-17 23:21:24 [main] INFO  o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+2024-04-17 23:21:24 [main] INFO  org.hibernate.Version - HHH000412: Hibernate ORM core version 6.4.4.Final
+2024-04-17 23:21:24 [main] INFO  o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+2024-04-17 23:21:25 [main] INFO  o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2024-04-17 23:21:28 [main] INFO  o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2024-04-17 23:21:28 [main] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2024-04-17 23:21:29 [main] INFO  o.s.d.j.r.query.QueryEnhancerFactory - Hibernate is in classpath; If applicable, HQL parser will be used.
+2024-04-17 23:21:30 [main] WARN  o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2024-04-17 23:21:31 [main] INFO  o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-8080"]
+2024-04-17 23:21:31 [main] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port 8080 (http) with context path ''
+2024-04-17 23:21:31 [main] INFO  com.example.demo.Demo1Application - Started Demo1Application in 12.444 seconds (process running for 14.236)
+2024-04-17 23:21:37 [http-nio-8080-exec-2] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+2024-04-17 23:21:37 [http-nio-8080-exec-2] INFO  o.s.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+2024-04-17 23:21:37 [http-nio-8080-exec-2] INFO  o.s.web.servlet.DispatcherServlet - Completed initialization in 2 ms
+2024-04-17 23:21:50 [http-nio-8080-exec-2] INFO  com.example.demo.utils.SimpleCache - Getting from cache for key: 15_math
+2024-04-17 23:22:14 [http-nio-8080-exec-2] INFO  com.example.demo.utils.SimpleCache - Getting from cache for key: 15_trivia
+2024-04-17 23:22:19 [http-nio-8080-exec-2] INFO  c.e.demo.controller.FactController - Update fact.
+2024-04-17 23:22:31 [http-nio-8080-exec-3] INFO  c.e.d.controller.FactInfoController - GET /info/all called with parameters: number=16, type=math
+2024-04-17 23:22:31 [http-nio-8080-exec-3] INFO  com.example.demo.utils.SimpleCache - Getting from cache for key: 16_math
+2024-04-17 23:22:31 [http-nio-8080-exec-3] INFO  com.example.demo.utils.SimpleCache - Adding to cache - Key: 16_math, Value: [FactCategory(id=3172, category=Category(id=5, name=math), fact=Fact(id=2265, number=Numbeer(id=2171, numberData=16), description=is the only number of the form x^{y} = y^{x} with x and y being different integers.), author=UNKNOWN), FactCategory(id=4972, category=Category(id=5, name=math), fact=Fact(id=3163, number=Numbeer(id=2171, numberData=16), description=is the base of the hexadecimal number system, which is used extensively in computer science.), author=UNKNOWN), FactCategory(id=5933, category=Category(id=5, name=math), fact=Fact(id=3594, number=Numbeer(id=2171, numberData=16), description=is the hexadecimal system, a common number system used in computer programming, uses 16 digits where the last 6 are usually represented by letters: 0,1,2,3,4,5,6,7,8,9,A,B,C,D,E,F.), author=UNKNOWN), FactCategory(id=5968, category=Category(id=5, name=math), fact=Fact(id=3608, number=Numbeer(id=2171, numberData=16), description=is the first number to be the aliquot sum of a lesser number; 12, it is also the aliquot sum of the greater number; the discrete semiprime, 26.), author=UNKNOWN), FactCategory(id=7372, category=Category(id=5, name=math), fact=Fact(id=4049, number=Numbeer(id=2171, numberData=16), description=is the only integer that equals mn and nm, for some unequal integers m and n (m = 4, n = 2, or vice versa).), author=UNKNOWN), FactCategory(id=7972, category=Category(id=5, name=math), fact=Fact(id=4173, number=Numbeer(id=2171, numberData=16), description=is a centered pentagonal number.), author=UNKNOWN)]
+2024-04-17 23:22:31 [http-nio-8080-exec-3] INFO  c.e.d.s.d.DefaultFactCategoryService - Data loaded from repository and added to cache. Key: 16_math
+2024-04-17 23:22:35 [http-nio-8080-exec-4] INFO  c.e.d.controller.FactInfoController - GET /info/all called with parameters: number=15, type=math
+2024-04-17 23:22:35 [http-nio-8080-exec-4] INFO  com.example.demo.utils.SimpleCache - Getting from cache for key: 15_math
+2024-04-17 23:22:35 [http-nio-8080-exec-4] INFO  com.example.demo.utils.SimpleCache - Adding to cache - Key: 15_math, Value: [FactCategory(id=3171, category=Category(id=5, name=math), fact=Fact(id=2264, number=Numbeer(id=2170, numberData=15), description=is the smallest composite number n with the property that there is only one group of order n.), author=UNKNOWN), FactCategory(id=4971, category=Category(id=5, name=math), fact=Fact(id=3162, number=Numbeer(id=2170, numberData=15), description=is the 4th discrete semiprime (3.5) and the first member of the (3.q) discrete semiprime family.), author=UNKNOWN), FactCategory(id=5929, category=Category(id=5, name=math), fact=Fact(id=3591, number=Numbeer(id=2170, numberData=15), description=is a triangular number, a hexagonal number, a pentatope number and the 4th Bell number.), author=UNKNOWN)]
+2024-04-17 23:22:35 [http-nio-8080-exec-4] INFO  c.e.d.s.d.DefaultFactCategoryService - Data loaded from repository and added to cache. Key: 15_math
+2024-04-17 23:22:40 [http-nio-8080-exec-6] INFO  c.e.d.controller.FactInfoController - GET /info/all called with parameters: number=15, type=trivia
+2024-04-17 23:22:40 [http-nio-8080-exec-6] INFO  com.example.demo.utils.SimpleCache - Getting from cache for key: 15_trivia
+2024-04-17 23:22:40 [http-nio-8080-exec-6] INFO  com.example.demo.utils.SimpleCache - Adding to cache - Key: 15_trivia, Value: [FactCategory(id=13174, category=Category(id=6, name=trivia), fact=Fact(id=5545, number=Numbeer(id=2170, numberData=15), description=Test fact.), author=Bear8), FactCategory(id=4172, category=Category(id=6, name=trivia), fact=Fact(id=2694, number=Numbeer(id=2170, numberData=15), description=is the approximate speed in miles per hour a penguin swims at.), author=UNKNOWN), FactCategory(id=5171, category=Category(id=6, name=trivia), fact=Fact(id=3269, number=Numbeer(id=2170, numberData=15), description=is the number of minutes carbon monoxide can kill a person in.), author=UNKNOWN), FactCategory(id=6551, category=Category(id=6, name=trivia), fact=Fact(id=3773, number=Numbeer(id=2170, numberData=15), description=is the number of minutes in one quarter of an hour.), author=UNKNOWN), FactCategory(id=7571, category=Category(id=6, name=trivia), fact=Fact(id=4077, number=Numbeer(id=2170, numberData=15), description=is the age for obtaining a driver's (or learner's) permit in certain jurisdictions, including some where the age for a driver's license is sixteen.), author=UNKNOWN), FactCategory(id=8171, category=Category(id=6, name=trivia), fact=Fact(id=4197, number=Numbeer(id=2170, numberData=15), description=is the legal age for sexual intercourse in many countries.), author=UNKNOWN), FactCategory(id=9971, category=Category(id=6, name=trivia), fact=Fact(id=4432, number=Numbeer(id=2170, numberData=15), description=is the number of times an average person laughs a day.), author=UNKNOWN)]
+2024-04-17 23:22:40 [http-nio-8080-exec-6] INFO  c.e.d.s.d.DefaultFactCategoryService - Data loaded from repository and added to cache. Key: 15_trivia
+2024-04-17 23:22:54 [http-nio-8080-exec-5] ERROR c.e.demo.exception.ExceptionHandle - Error 500: Runtime Exception
+jakarta.validation.ConstraintViolationException: updFact.type: должно соответствовать "^(year|math|trivia)$"
+	at org.springframework.validation.beanvalidation.MethodValidationInterceptor.invoke(MethodValidationInterceptor.java:170)
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:184)
+	at org.springframework.aop.framework.CglibAopProxy$CglibMethodInvocation.proceed(CglibAopProxy.java:765)
+	at org.springframework.aop.framework.CglibAopProxy$DynamicAdvisedInterceptor.intercept(CglibAopProxy.java:717)
+	at com.example.demo.controller.FactController$$SpringCGLIB$$0.updFact(<generated>)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at org.springframework.web.method.support.InvocableHandlerMethod.doInvoke(InvocableHandlerMethod.java:259)
+	at org.springframework.web.method.support.InvocableHandlerMethod.invokeForRequest(InvocableHandlerMethod.java:192)
+	at org.springframework.web.servlet.mvc.method.annotation.ServletInvocableHandlerMethod.invokeAndHandle(ServletInvocableHandlerMethod.java:118)
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.invokeHandlerMethod(RequestMappingHandlerAdapter.java:920)
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.handleInternal(RequestMappingHandlerAdapter.java:830)
+	at org.springframework.web.servlet.mvc.method.AbstractHandlerMethodAdapter.handle(AbstractHandlerMethodAdapter.java:87)
+	at org.springframework.web.servlet.DispatcherServlet.doDispatch(DispatcherServlet.java:1089)
+	at org.springframework.web.servlet.DispatcherServlet.doService(DispatcherServlet.java:979)
+	at org.springframework.web.servlet.FrameworkServlet.processRequest(FrameworkServlet.java:1014)
+	at org.springframework.web.servlet.FrameworkServlet.doPut(FrameworkServlet.java:925)
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:593)
+	at org.springframework.web.servlet.FrameworkServlet.service(FrameworkServlet.java:885)
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:658)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:205)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:149)
+	at org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:51)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:174)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:149)
+	at org.springframework.web.filter.RequestContextFilter.doFilterInternal(RequestContextFilter.java:100)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:174)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:149)
+	at org.springframework.web.filter.FormContentFilter.doFilterInternal(FormContentFilter.java:93)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:174)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:149)
+	at org.springframework.web.filter.CharacterEncodingFilter.doFilterInternal(CharacterEncodingFilter.java:201)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:174)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:149)
+	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:167)
+	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:90)
+	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:482)
+	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:115)
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:93)
+	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:74)
+	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:344)
+	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:391)
+	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:63)
+	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:896)
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1744)
+	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:52)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1191)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:659)
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:63)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+2024-04-17 23:23:04 [http-nio-8080-exec-8] ERROR c.e.demo.exception.ExceptionHandle - Error 500: Runtime Exception
+jakarta.validation.ConstraintViolationException: updFact.type: должно соответствовать "^(year|math|trivia)$"
+	at org.springframework.validation.beanvalidation.MethodValidationInterceptor.invoke(MethodValidationInterceptor.java:170)
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:184)
+	at org.springframework.aop.framework.CglibAopProxy$CglibMethodInvocation.proceed(CglibAopProxy.java:765)
+	at org.springframework.aop.framework.CglibAopProxy$DynamicAdvisedInterceptor.intercept(CglibAopProxy.java:717)
+	at com.example.demo.controller.FactController$$SpringCGLIB$$0.updFact(<generated>)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at org.springframework.web.method.support.InvocableHandlerMethod.doInvoke(InvocableHandlerMethod.java:259)
+	at org.springframework.web.method.support.InvocableHandlerMethod.invokeForRequest(InvocableHandlerMethod.java:192)
+	at org.springframework.web.servlet.mvc.method.annotation.ServletInvocableHandlerMethod.invokeAndHandle(ServletInvocableHandlerMethod.java:118)
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.invokeHandlerMethod(RequestMappingHandlerAdapter.java:920)
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.handleInternal(RequestMappingHandlerAdapter.java:830)
+	at org.springframework.web.servlet.mvc.method.AbstractHandlerMethodAdapter.handle(AbstractHandlerMethodAdapter.java:87)
+	at org.springframework.web.servlet.DispatcherServlet.doDispatch(DispatcherServlet.java:1089)
+	at org.springframework.web.servlet.DispatcherServlet.doService(DispatcherServlet.java:979)
+	at org.springframework.web.servlet.FrameworkServlet.processRequest(FrameworkServlet.java:1014)
+	at org.springframework.web.servlet.FrameworkServlet.doPut(FrameworkServlet.java:925)
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:593)
+	at org.springframework.web.servlet.FrameworkServlet.service(FrameworkServlet.java:885)
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:658)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:205)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:149)
+	at org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:51)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:174)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:149)
+	at org.springframework.web.filter.RequestContextFilter.doFilterInternal(RequestContextFilter.java:100)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:174)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:149)
+	at org.springframework.web.filter.FormContentFilter.doFilterInternal(FormContentFilter.java:93)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:174)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:149)
+	at org.springframework.web.filter.CharacterEncodingFilter.doFilterInternal(CharacterEncodingFilter.java:201)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:174)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:149)
+	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:167)
+	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:90)
+	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:482)
+	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:115)
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:93)
+	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:74)
+	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:344)
+	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:391)
+	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:63)
+	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:896)
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1744)
+	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:52)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1191)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:659)
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:63)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+2024-04-17 23:23:09 [http-nio-8080-exec-9] INFO  com.example.demo.utils.SimpleCache - Getting from cache for key: 15_trivia
+2024-04-17 23:23:09 [http-nio-8080-exec-9] INFO  com.example.demo.utils.SimpleCache - Deleting cache for key: 15_trivia
+2024-04-17 23:23:09 [http-nio-8080-exec-9] INFO  c.e.d.s.d.DefaultFactCategoryService - Cache deleted for key: 15_trivia
+2024-04-17 23:23:09 [http-nio-8080-exec-9] INFO  com.example.demo.utils.SimpleCache - Getting from cache for key: 15_math
+2024-04-17 23:23:09 [http-nio-8080-exec-9] INFO  com.example.demo.utils.SimpleCache - Deleting cache for key: 15_math
+2024-04-17 23:23:09 [http-nio-8080-exec-9] INFO  c.e.d.s.d.DefaultFactCategoryService - Cache deleted for key: 15_math
+2024-04-17 23:23:09 [http-nio-8080-exec-9] INFO  c.e.demo.controller.FactController - Update fact.
+2024-04-17 23:23:16 [http-nio-8080-exec-1] INFO  c.e.d.controller.FactInfoController - GET /info/all called with parameters: number=15, type=trivia
+2024-04-17 23:23:16 [http-nio-8080-exec-1] INFO  com.example.demo.utils.SimpleCache - Getting from cache for key: 15_trivia
+2024-04-17 23:23:16 [http-nio-8080-exec-1] INFO  com.example.demo.utils.SimpleCache - Adding to cache - Key: 15_trivia, Value: [FactCategory(id=4172, category=Category(id=6, name=trivia), fact=Fact(id=2694, number=Numbeer(id=2170, numberData=15), description=is the approximate speed in miles per hour a penguin swims at.), author=UNKNOWN), FactCategory(id=5171, category=Category(id=6, name=trivia), fact=Fact(id=3269, number=Numbeer(id=2170, numberData=15), description=is the number of minutes carbon monoxide can kill a person in.), author=UNKNOWN), FactCategory(id=6551, category=Category(id=6, name=trivia), fact=Fact(id=3773, number=Numbeer(id=2170, numberData=15), description=is the number of minutes in one quarter of an hour.), author=UNKNOWN), FactCategory(id=7571, category=Category(id=6, name=trivia), fact=Fact(id=4077, number=Numbeer(id=2170, numberData=15), description=is the age for obtaining a driver's (or learner's) permit in certain jurisdictions, including some where the age for a driver's license is sixteen.), author=UNKNOWN), FactCategory(id=8171, category=Category(id=6, name=trivia), fact=Fact(id=4197, number=Numbeer(id=2170, numberData=15), description=is the legal age for sexual intercourse in many countries.), author=UNKNOWN), FactCategory(id=9971, category=Category(id=6, name=trivia), fact=Fact(id=4432, number=Numbeer(id=2170, numberData=15), description=is the number of times an average person laughs a day.), author=UNKNOWN)]
+2024-04-17 23:23:16 [http-nio-8080-exec-1] INFO  c.e.d.s.d.DefaultFactCategoryService - Data loaded from repository and added to cache. Key: 15_trivia
+2024-04-17 23:23:20 [http-nio-8080-exec-2] INFO  c.e.d.controller.FactInfoController - GET /info/all called with parameters: number=15, type=math
+2024-04-17 23:23:20 [http-nio-8080-exec-2] INFO  com.example.demo.utils.SimpleCache - Getting from cache for key: 15_math
+2024-04-17 23:23:20 [http-nio-8080-exec-2] INFO  com.example.demo.utils.SimpleCache - Adding to cache - Key: 15_math, Value: [FactCategory(id=13174, category=Category(id=5, name=math), fact=Fact(id=5545, number=Numbeer(id=2170, numberData=15), description=Test fact.), author=Bear8), FactCategory(id=3171, category=Category(id=5, name=math), fact=Fact(id=2264, number=Numbeer(id=2170, numberData=15), description=is the smallest composite number n with the property that there is only one group of order n.), author=UNKNOWN), FactCategory(id=4971, category=Category(id=5, name=math), fact=Fact(id=3162, number=Numbeer(id=2170, numberData=15), description=is the 4th discrete semiprime (3.5) and the first member of the (3.q) discrete semiprime family.), author=UNKNOWN), FactCategory(id=5929, category=Category(id=5, name=math), fact=Fact(id=3591, number=Numbeer(id=2170, numberData=15), description=is a triangular number, a hexagonal number, a pentatope number and the 4th Bell number.), author=UNKNOWN)]
+2024-04-17 23:23:20 [http-nio-8080-exec-2] INFO  c.e.d.s.d.DefaultFactCategoryService - Data loaded from repository and added to cache. Key: 15_math
+2024-04-17 23:23:35 [http-nio-8080-exec-3] INFO  com.example.demo.utils.SimpleCache - Getting from cache for key: 15_math
+2024-04-17 23:23:35 [http-nio-8080-exec-3] INFO  com.example.demo.utils.SimpleCache - Deleting cache for key: 15_math
+2024-04-17 23:23:35 [http-nio-8080-exec-3] INFO  c.e.d.s.d.DefaultFactCategoryService - Cache deleted for key: 15_math
+2024-04-17 23:23:35 [http-nio-8080-exec-3] INFO  c.e.demo.controller.FactController - Fact delete successfully.
+2024-04-17 23:23:41 [http-nio-8080-exec-4] INFO  c.e.d.controller.FactInfoController - GET /info/all called with parameters: number=15, type=math
+2024-04-17 23:23:41 [http-nio-8080-exec-4] INFO  com.example.demo.utils.SimpleCache - Getting from cache for key: 15_math
+2024-04-17 23:23:41 [http-nio-8080-exec-4] INFO  com.example.demo.utils.SimpleCache - Adding to cache - Key: 15_math, Value: [FactCategory(id=3171, category=Category(id=5, name=math), fact=Fact(id=2264, number=Numbeer(id=2170, numberData=15), description=is the smallest composite number n with the property that there is only one group of order n.), author=UNKNOWN), FactCategory(id=4971, category=Category(id=5, name=math), fact=Fact(id=3162, number=Numbeer(id=2170, numberData=15), description=is the 4th discrete semiprime (3.5) and the first member of the (3.q) discrete semiprime family.), author=UNKNOWN), FactCategory(id=5929, category=Category(id=5, name=math), fact=Fact(id=3591, number=Numbeer(id=2170, numberData=15), description=is a triangular number, a hexagonal number, a pentatope number and the 4th Bell number.), author=UNKNOWN)]
+2024-04-17 23:23:41 [http-nio-8080-exec-4] INFO  c.e.d.s.d.DefaultFactCategoryService - Data loaded from repository and added to cache. Key: 15_math
+2024-04-17 23:29:17 [SpringApplicationShutdownHook] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+2024-04-17 23:29:17 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
+2024-04-17 23:29:17 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.

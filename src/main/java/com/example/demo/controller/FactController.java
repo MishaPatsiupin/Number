@@ -4,7 +4,6 @@ import com.example.demo.entity.Category;
 import com.example.demo.entity.FactCategory;
 import com.example.demo.entity.Fact;
 import com.example.demo.entity.Numbeer;
-import com.example.demo.exception.ExceptionHandle;
 import com.example.demo.repository.CategoryRepository;
 import com.example.demo.repository.FactCategoryRepository;
 import com.example.demo.repository.FactRepository;
@@ -34,6 +33,24 @@ public class FactController {
   private final FactRepository factRepository;
   private final FactCategoryService factCategoryService;
   private static final Logger logger = LoggerFactory.getLogger(FactController.class);
+
+    private void deleteCacheIfNeeded(boolean flagNumberChange, boolean flagTypeChange,
+                                     Long number, String type, FactCategory factCategoryEntity) {
+        if (flagNumberChange || flagTypeChange) {
+            if (flagNumberChange || !flagTypeChange) {
+                factCategoryService.deleteCache(number.toString() + "_"
+                        + factCategoryEntity.getCategory().getName());
+            }
+            if (!flagNumberChange || flagTypeChange) {
+                factCategoryService.deleteCache(factCategoryEntity.getFact().getNumber().getNumberData()
+                        + "_"
+                        + type);
+            }
+            if (flagNumberChange && flagTypeChange) {
+                factCategoryService.deleteCache(number.toString() + "_" + type);
+            }
+        }
+    }
 
   @PostMapping(value = "/fact/add")
   public ResponseEntity<String> addFact(
@@ -69,7 +86,6 @@ public class FactController {
     } catch (NumberFormatException e) {
       logger.error("Invalid number/fact format: {}", e.getMessage());
       throw new IllegalAccessException("Invalid number/fact format");
-      // return ResponseEntity.badRequest().body("Invalid number/fact format");
     }
   }
 
@@ -101,14 +117,15 @@ public class FactController {
         factRepository.deleteById(numberData);
 
         long numId = factCategoryEntity.getFact().getNumber().getId();
+        String messege = "Fact delete successfully.";
         if (factRepository.countByNumberId(numId) > 0) {
           // Если список не пустой, значит есть соответствующий факт
-          logger.info("Fact delete successfully.");
-          return ResponseEntity.ok().body("Fact delete successfully.");
+          logger.info(messege);
+          return ResponseEntity.ok().body(messege);
         } else {
           numberRepository.delete(delNumber);
-          logger.info("Fact delete successfully.");
-          return ResponseEntity.ok().body("Fact delete successfully.");
+          logger.info(messege);
+          return ResponseEntity.ok().body(messege);
         }
       }
 
@@ -117,7 +134,6 @@ public class FactController {
     } catch (NumberFormatException e) {
       logger.error("Invalid id format: {}", e.getMessage());
       throw new IllegalAccessException("Invalid id format");
-      // return ResponseEntity.badRequest().body("Invalid id format");
     }
   }
 
@@ -174,17 +190,7 @@ public class FactController {
         factCategoryEntity.setAuthor(author);
       }
 
-      if (flagNumberChange | flagTypeChange){
-          if (flagNumberChange | !flagTypeChange)
-              factCategoryService.deleteCache(number.toString() + "_"
-                      + factCategoryEntity.getCategory().getName());
-          if (!flagNumberChange | flagTypeChange)
-              factCategoryService.deleteCache(factCategoryEntity.getFact().getNumber().getNumberData()
-                      + "_"
-                      + type);
-          if (flagNumberChange & flagTypeChange)
-              factCategoryService.deleteCache(number.toString() + "_" + type);
-      }
+        deleteCacheIfNeeded(flagNumberChange, flagTypeChange, number, type, factCategoryEntity);
 
       factCategoryRepository.save(factCategoryEntity);
 
@@ -193,8 +199,7 @@ public class FactController {
     } catch (Exception e) {
       logger.error("An error occurred while updating the fact: {}", e.getMessage());
       throw new IllegalAccessException("An error occurred while updating the fact.");
-      //      return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-      //          .body("An error occurred while updating the fact.");
+
     }
   }
 }

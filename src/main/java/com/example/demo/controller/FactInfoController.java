@@ -33,6 +33,7 @@ public class FactInfoController {
   FactService factService;
 
   private static final Logger logger = LoggerFactory.getLogger(FactInfoController.class);
+  public static final String ERROR_MESSEGE_1 = "Error accessing information: ";
 
   @GetMapping(value = "/info")
   @Validated
@@ -48,7 +49,7 @@ public class FactInfoController {
           FactCategory factCategory = factCategoryService.getFactByFactAndCategory(numberS, type);
           return new ResponseEntity<>(factCategory, HttpStatus.OK);
       } catch (Exception e) {
-          String errorMessage = "Error accessing information: " + e.getMessage();
+          String errorMessage = ERROR_MESSEGE_1 + e.getMessage();
           logger.error(errorMessage);
           throw new IllegalAccessException(errorMessage);
       }
@@ -68,7 +69,7 @@ public class FactInfoController {
           List<FactCategory> factCategories = factCategoryService.getFactsByFactAndCategory(numberS, type);
           return new ResponseEntity<>(factCategories, HttpStatus.OK);
       } catch (Exception e) {
-          String errorMessage = "Error accessing information: " + e.getMessage();
+          String errorMessage = ERROR_MESSEGE_1 + e.getMessage();
           logger.error(errorMessage);
           throw new IllegalAccessException(errorMessage);
       }
@@ -92,7 +93,7 @@ public class FactInfoController {
 
           return new ResponseEntity<>(response, HttpStatus.OK);
       } catch (Exception e) {
-          String errorMessage = "Error accessing information: " + e.getMessage();
+          String errorMessage = ERROR_MESSEGE_1 + e.getMessage();
           logger.error(errorMessage);
           throw new IllegalAccessException(errorMessage);
       }
