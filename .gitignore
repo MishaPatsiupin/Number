@@ -36,5 +36,4 @@ out/
 ### VS Code ###
 .vscode/
 
-*.log
-.log
+/src/main/resources/logs/logs.log
