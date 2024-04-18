@@ -10,6 +10,7 @@ import com.example.demo.service.NumberService;
 import com.example.demo.service.defaultt.DefaultNumberService;
 import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -20,6 +21,7 @@ import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.web.servlet.resource.NoResourceFoundException;
 
 /** The type Fact info controller. */
 @Validated
@@ -58,17 +60,23 @@ public class FactInfoController {
   @GetMapping(value = "/info")
   @Validated
   public ResponseEntity<FactCategory> getInfoOne(
-      @RequestParam(value = "number", defaultValue = "random") @Pattern(regexp = "\\d+|^(random)")
-          String numberS,
-      @RequestParam(value = "type", defaultValue = "trivia")
-          @Pattern(regexp = "^(year|math|trivia)$")
-          String type)
-      throws IllegalAccessException {
+          @RequestParam(value = "number", defaultValue = "random") @Pattern(regexp = "\\d+|^(random)") String numberS,
+          @RequestParam(value = "type", defaultValue = "trivia") @Pattern(regexp = "^(year|math|trivia)$") String type)
+          throws IllegalAccessException, NoResourceFoundException {
 
     try {
       logger.info("GET /info called with parameters: number={}, type={}", numberS, type);
       FactCategory factCategory = factCategoryService.getFactByFactAndCategory(numberS, type);
+
+      if (factCategory == null) {
+        throw new NoResourceFoundException(HttpMethod.GET, "Resource not found");
+      }
+
       return new ResponseEntity<>(factCategory, HttpStatus.OK);
+    } catch (NoResourceFoundException e) {
+      String errorMessage = ERROR_MESSEGE_1 + e.getMessage();
+      logger.error(errorMessage);
+      throw e;
     } catch (Exception e) {
       String errorMessage = ERROR_MESSEGE_1 + e.getMessage();
       logger.error(errorMessage);
@@ -84,21 +92,25 @@ public class FactInfoController {
    * @return the info all
    * @throws IllegalAccessException the illegal access exception
    */
-  @GetMapping(value = "/info/all", produces = "application/json")
-  @Validated
+  @GetMapping(value = "/info/all")
   public ResponseEntity<List<FactCategory>> getInfoAll(
-      @RequestParam(value = "number", defaultValue = "random") @Pattern(regexp = "\\d+|^(random)")
-          String numberS,
-      @RequestParam(value = "type", defaultValue = "trivia")
-          @Pattern(regexp = "^(year|math|trivia)$")
-          String type)
-      throws IllegalAccessException {
+          @RequestParam(value = "number", defaultValue = "random") @Pattern(regexp = "\\d+|^(random)") String numberS,
+          @RequestParam(value = "type", defaultValue = "trivia") @Pattern(regexp = "^(year|math|trivia)$") String type)
+          throws IllegalAccessException, NoResourceFoundException {
 
     try {
       logger.info("GET /info/all called with parameters: number={}, type={}", numberS, type);
-      List<FactCategory> factCategories =
-          factCategoryService.getFactsByFactAndCategory(numberS, type);
+      List<FactCategory> factCategories = factCategoryService.getFactsByFactAndCategory(numberS, type);
+
+      if (factCategories.isEmpty()) {
+        throw new NoResourceFoundException(HttpMethod.GET, "Resources not found");
+      }
+
       return new ResponseEntity<>(factCategories, HttpStatus.OK);
+    } catch (NoResourceFoundException e) {
+      String errorMessage = ERROR_MESSEGE_1 + e.getMessage();
+      logger.error(errorMessage);
+      throw e;
     } catch (Exception e) {
       String errorMessage = ERROR_MESSEGE_1 + e.getMessage();
       logger.error(errorMessage);
@@ -115,7 +127,7 @@ public class FactInfoController {
    */
   @GetMapping(value = "/info/all/number", produces = "application/json")
   @Validated
-  public ResponseEntity<List<List<FactCategory>>> getInfoCat(
+  public ResponseEntity<List<List<FactCategory>>> getInfoAllNumber(
       @RequestParam(value = "number", defaultValue = "random") @Pattern(regexp = "\\d+|^(random)")
           String numberS)
       throws IllegalAccessException {
