@@ -53,7 +53,7 @@ public class ExceptionHandle {
   @ExceptionHandler({HttpRequestMethodNotSupportedException.class})
   public ResponseEntity<Message> handleMethodNotSupportedException(
       HttpRequestMethodNotSupportedException e) {
-    String errorMessage = "Error 405: Method Not Supported";
+    String errorMessage = "Error 400: Bad Request";
     logger.error(errorMessage, e);
     return ResponseEntity.status(e.getStatusCode()).body(new Message(errorMessage, e.getMessage()));
   }
