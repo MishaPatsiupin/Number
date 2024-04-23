@@ -60,9 +60,12 @@ public class FactInfoController {
   @GetMapping(value = "/info")
   @Validated
   public ResponseEntity<FactCategory> getInfoOne(
-          @RequestParam(value = "number", defaultValue = "random") @Pattern(regexp = "\\d+|^(random)") String numberS,
-          @RequestParam(value = "type", defaultValue = "trivia") @Pattern(regexp = "^(year|math|trivia)$") String type)
-          throws IllegalAccessException, NoResourceFoundException {
+      @RequestParam(value = "number", defaultValue = "random") @Pattern(regexp = "\\d+|^(random)")
+          String numberS,
+      @RequestParam(value = "type", defaultValue = "trivia")
+          @Pattern(regexp = "^(year|math|trivia)$")
+          String type)
+      throws IllegalAccessException, NoResourceFoundException {
 
     try {
       logger.info("GET /info called with parameters: number={}, type={}", numberS, type);
@@ -94,13 +97,17 @@ public class FactInfoController {
    */
   @GetMapping(value = "/info/all")
   public ResponseEntity<List<FactCategory>> getInfoAll(
-          @RequestParam(value = "number", defaultValue = "random") @Pattern(regexp = "\\d+|^(random)") String numberS,
-          @RequestParam(value = "type", defaultValue = "trivia") @Pattern(regexp = "^(year|math|trivia)$") String type)
-          throws IllegalAccessException, NoResourceFoundException {
+      @RequestParam(value = "number", defaultValue = "random") @Pattern(regexp = "\\d+|^(random)")
+          String numberS,
+      @RequestParam(value = "type", defaultValue = "trivia")
+          @Pattern(regexp = "^(year|math|trivia)$")
+          String type)
+      throws IllegalAccessException, NoResourceFoundException {
 
     try {
       logger.info("GET /info/all called with parameters: number={}, type={}", numberS, type);
-      List<FactCategory> factCategories = factCategoryService.getFactsByFactAndCategory(numberS, type);
+      List<FactCategory> factCategories =
+          factCategoryService.getFactsByFactAndCategory(numberS, type);
 
       if (factCategories.isEmpty()) {
         throw new NoResourceFoundException(HttpMethod.GET, "Resources not found");

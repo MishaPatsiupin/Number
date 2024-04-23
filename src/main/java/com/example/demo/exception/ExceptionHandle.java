@@ -24,10 +24,10 @@ public class ExceptionHandle {
    * @return the response entity
    */
   @ExceptionHandler({IllegalArgumentException.class})
-  public ResponseEntity<Message> handleIllegalArgumentException(IllegalArgumentException e) {
-    String errorMessage = "Error 404: Illegal Argument";
+  public ResponseEntity<Message> MethodNotAllowedException(IllegalArgumentException e) {
+    String errorMessage = "Error 400: Bad Request";
     logger.error(errorMessage, e);
-    return ResponseEntity.status(HttpStatus.NOT_FOUND)
+    return ResponseEntity.status(HttpStatus.BAD_REQUEST)
         .body(new Message(errorMessage, e.getMessage()));
   }
 
@@ -41,7 +41,8 @@ public class ExceptionHandle {
   public ResponseEntity<Message> handleNoResourceFoundException(NoHandlerFoundException e) {
     String errorMessage = "ERROR 400: No Handler Found";
     logger.error(errorMessage, e);
-    return ResponseEntity.status(e.getStatusCode()).body(new Message(errorMessage, e.getMessage()));
+    return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+        .body(new Message(errorMessage, e.getMessage()));
   }
 
   /**
@@ -68,8 +69,7 @@ public class ExceptionHandle {
   public ResponseEntity<Message> handlerRuntimeException(RuntimeException e) {
     String errorMessage = "Error 500: Runtime Exception";
     logger.error(errorMessage, e);
-    return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-        .body(new Message(errorMessage, e.getMessage()));
+    return ResponseEntity.status(500).body(new Message(errorMessage, e.getMessage()));
   }
 
   /**
@@ -83,8 +83,7 @@ public class ExceptionHandle {
       MissingServletRequestParameterException e) {
     String errorMessage = "Error 400: Bad Request";
     logger.error(errorMessage, e);
-    return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-        .body(new Message(errorMessage, e.getMessage()));
+    return ResponseEntity.status(400).body(new Message(errorMessage, e.getMessage()));
   }
 
   /**
@@ -95,10 +94,9 @@ public class ExceptionHandle {
    */
   @ExceptionHandler({NoResourceFoundException.class})
   public ResponseEntity<Message> noResourceFoundException(NoResourceFoundException e) {
-    String errorMessage = "ERROR 404: No Resource Found";
+    String errorMessage = "ERROR 400: No Resource Found";
     logger.error(errorMessage, e);
-    return ResponseEntity.status(HttpStatus.NOT_FOUND)
-        .body(new Message(errorMessage, e.getMessage()));
+    return ResponseEntity.status(400).body(new Message(errorMessage, e.getMessage()));
   }
 
   /**
@@ -111,8 +109,7 @@ public class ExceptionHandle {
   public ResponseEntity<Message> exception(Exception e) {
     String errorMessage = "Error 500: Unknown Exception";
     logger.error(errorMessage, e);
-    return ResponseEntity.status(HttpStatus.NOT_FOUND)
-        .body(new Message(errorMessage, e.getMessage()));
+    return ResponseEntity.status(500).body(new Message(errorMessage, e.getMessage()));
   }
 
   private record Message(String message, String description) {}
