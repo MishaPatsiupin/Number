@@ -5,7 +5,13 @@ plugins {
     id "org.sonarqube" version "4.4.1.3373"
     id "jacoco"
 }
-
+sonar {
+    properties {
+        property "sonar.projectKey", "MishaPatsiupin_NumBeer"
+        property "sonar.organization", "bears"
+        property "sonar.host.url", "https://sonarcloud.io"
+    }
+}
 jacocoTestReport {
     reports {
         xml.required = true
@@ -14,13 +20,6 @@ jacocoTestReport {
 }
 test {
     jvmArgs "-XX:+EnableDynamicAgentLoading"
-}
-sonar {
-    properties {
-        property "sonar.projectKey", "MishaPatsiupin_NumBeer"
-        property "sonar.organization", "bears"
-        property "sonar.host.url", "https://sonarcloud.io"
-    }
 }
 
 group = 'com.example'
