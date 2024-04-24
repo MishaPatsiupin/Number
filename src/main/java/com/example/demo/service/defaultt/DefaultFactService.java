@@ -26,37 +26,6 @@ public class DefaultFactService implements FactService {
   private final CategoryRepository categoryRepository;
 
   @Override
-  public ResponseEntity<String> deleteFact(String number) {
-    try {
-      long numberData = Long.parseLong(number);
-      Fact factEntity = factRepository.findById(numberData).orElse(null);
-
-      if (factEntity != null) {
-        FactCategory factCategoryEntity =
-            factCategoryRepository.getFactCategoryByFactEntity(factEntity);
-        if (factCategoryEntity != null) {
-          factCategoryRepository.delete(factCategoryEntity);
-        }
-
-        Numbeer numberEntity = factEntity.getNumber();
-        factRepository.deleteById(numberData);
-
-        if (factRepository.findByNumber(numberEntity) == null) {
-          numberRepository.delete(numberEntity);
-          logger.info("Fact deleted with number: {}", number);
-          return ResponseEntity.ok().body("Fact deleted successfully.");
-        }
-      }
-
-      logger.info("Fact not found with number: {}", number);
-      return ResponseEntity.ok().body("Fact not found.");
-    } catch (NumberFormatException e) {
-      logger.error("Invalid id format: {}", number);
-      return ResponseEntity.badRequest().body("Invalid id format");
-    }
-  }
-
-  @Override
   public Fact createFact(long number, String description) {
     Numbeer existingNumber = numberRepository.findByNumberData(number);
 

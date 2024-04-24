@@ -62,13 +62,4 @@ public interface NumberService {
    */
   void deleteNumber(long id);
 
-  /**
-   * Emply number string.
-   *
-   * @param responseS the response s
-   * @param number the number
-   * @param type the type
-   * @return the string
-   */
-  public String emplyNumber(List<String> responseS, long number, String type);
 }

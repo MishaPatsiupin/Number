@@ -30,7 +30,13 @@ public class DefaultFactCategoryService implements FactCategoryService {
   private final SimpleCache simpleCache;
   private final SecureRandom random = new SecureRandom();
 
-  private Category getCategoryEntityById(long catId) {
+  /**
+   * Gets category entity by id.
+   *
+   * @param catId the cat id
+   * @return the category entity by id
+   */
+public Category getCategoryEntityById(long catId) {
     // Логика получения Category по идентификатору
     Optional<Category> categoryOptional = categoryRepository.findById(catId);
     return categoryOptional.orElse(null);
@@ -48,13 +54,25 @@ public class DefaultFactCategoryService implements FactCategoryService {
     }
   }
 
-  private Fact getFactEntityById(long facId) {
+  /**
+   * Gets fact entity by id.
+   *
+   * @param facId the fac id
+   * @return the fact entity by id
+   */
+public Fact getFactEntityById(long facId) {
     // Логика получения Fact по идентификатору
     Optional<Fact> factOptional = factRepository.findById(facId);
     return factOptional.orElse(null);
   }
 
-  private FactCategory getFactCategoryEntityById(long id) {
+  /**
+   * Gets fact category entity by id.
+   *
+   * @param id the id
+   * @return the fact category entity by id
+   */
+public FactCategory getFactCategoryEntityById(long id) {
     // Логика получения FactCategory по идентификатору
     Optional<FactCategory> factCategoryOptional = factCategoryRepository.findById(id);
     return factCategoryOptional.orElse(null);
@@ -69,7 +87,7 @@ public class DefaultFactCategoryService implements FactCategoryService {
    * @param numberRepository the number repository
    * @param simpleCache the simple cache
    */
-  @Autowired
+@Autowired
   public DefaultFactCategoryService(
       FactCategoryRepository factCategoryRepository,
       CategoryRepository categoryRepository,

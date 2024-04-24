@@ -112,19 +112,4 @@ public class DefaultNumberService implements NumberService {
     /** Year type. */
     YEAR
   }
-
-  @Override
-  public String emplyNumber(List<String> responseS, long number, String type) {
-    DefaultNumberService.Type typeEnum = DefaultNumberService.Type.valueOf(type.toUpperCase());
-    logger.warn("Number {}/type {} not fond ", number, type);
-    switch (typeEnum) {
-      case TRIVIA:
-        return number + " is an uninteresting number.";
-      case MATH:
-        return number + " is a boring number.";
-      case YEAR:
-        return number + " BC is the year that we do not know what happened.";
-    }
-    return "Xmm. Oy";
-  }
 }

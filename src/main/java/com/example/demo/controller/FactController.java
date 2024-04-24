@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /** The type Fact controller. */
 @Validated
@@ -70,7 +71,7 @@ public class FactController {
    * @return the response entity
    * @throws IllegalAccessException the illegal access exception
    */
-  @PostMapping(value = "/fact/add")
+@PostMapping(value = "/fact/add")
   public ResponseEntity<String> addFact(
       @RequestParam(value = "number")
           @Digits(integer = Integer.MAX_VALUE, fraction = 0, message = "Number must be an integer")
@@ -114,7 +115,7 @@ public class FactController {
    * @return the response entity
    * @throws IllegalAccessException the illegal access exception
    */
-  @DeleteMapping(value = "/fact/delete")
+@DeleteMapping(value = "/fact/delete")
   public ResponseEntity<String> delFact(
       @RequestParam(value = "id")
           @Pattern(regexp = "\\d+")
@@ -173,7 +174,7 @@ public class FactController {
    * @return the response entity
    * @throws IllegalAccessException the illegal access exception
    */
-  @PutMapping(value = "/fact/update")
+@PutMapping(value = "/fact/update")
   public ResponseEntity<String> updFact(
       @RequestParam(value = "id")
           @Digits(integer = Integer.MAX_VALUE, fraction = 0, message = "Number must be an integer")
@@ -237,43 +238,48 @@ public class FactController {
     }
   }
 
-  @PostMapping(value = "/fact/add/bulk")
+  /**
+   * Add bulk facts response entity.
+   *
+   * @param factRequests the fact requests
+   * @return the response entity
+   */
+@PostMapping(value = "/fact/add/bulk")
   public ResponseEntity<String> addBulkFacts(@RequestBody List<FactRequest> factRequests) {
     try {
-      List<Fact> createdFacts = new ArrayList<>();
+      List<Fact> createdFacts = factRequests.stream()
+              .map(factRequest -> {
+                Long number = factRequest.getNumber();
+                String type = factRequest.getType();
+                String newFact = factRequest.getFact();
+                String author = factRequest.getAuthor();
 
-      for (FactRequest factRequest : factRequests) {
-        Long number = factRequest.getNumber();
-        String type = factRequest.getType();
-        String newFact = factRequest.getFact();
-        String author = factRequest.getAuthor();
+                if (type == null) {
+                  type = "trivia";
+                }
+                if (author == null) {
+                  author = "UNKNOWN";
+                }
+                validateNumber(number);
+                validateType(type);
+                validateFact(newFact);
+                validateAuthor(author);
 
-        if (type == null) {
-          type = "trivia";
-        }
-        if (author == null) {
-          author = "UNKNOWN";
-        }
-        validateNumber(number);
-        validateType(type);
-        validateFact(newFact);
-        validateAuthor(author);
+                numberService.addNumber(number);
+                Category existingCategory = categoryRepository.findCategoryByName(type);
+                Fact createdFact = factService.createFact(number, newFact);
 
-        numberService.addNumber(number);
-        Category existingCategory = categoryRepository.findCategoryByName(type);
-        Fact createdFact = factService.createFact(number, newFact);
+                FactCategory factCategory = new FactCategory();
+                factCategory.setCategory(existingCategory);
+                factCategory.setFact(createdFact);
+                factCategory.setAuthor(author);
+                factCategoryRepository.save(factCategory);
 
-        FactCategory factCategory = new FactCategory();
-        factCategory.setCategory(existingCategory);
-        factCategory.setFact(createdFact);
-        factCategory.setAuthor(author);
-        factCategoryRepository.save(factCategory);
+                factCategoryService.deleteCache(number.toString() + "_" + type);
 
-        createdFacts.add(createdFact);
-
-        factCategoryService.deleteCache(
-                number.toString() + "_" + type);
-      }
+                return createdFact;
+              })
+              .collect(Collectors.toList());
 
       logger.info("Bulk facts added successfully.");
       return ResponseEntity.ok("Bulk facts added successfully.");
