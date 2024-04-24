@@ -277,7 +277,7 @@ public ResponseEntity<String> addBulkFacts(@RequestBody List<FactRequest> factRe
 
               return createdFact;
             })
-            .toList();
+            .forEach(fact -> {});
 
     logger.info("Bulk facts added successfully.");
     return ResponseEntity.ok("Bulk facts added successfully.");
