@@ -21,10 +21,8 @@ import org.springframework.format.annotation.NumberFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
+
 
 /** The type Fact controller. */
 @Validated
@@ -245,50 +243,49 @@ public class FactController {
    * @return the response entity
    */
 @PostMapping(value = "/fact/add/bulk")
-  public ResponseEntity<String> addBulkFacts(@RequestBody List<FactRequest> factRequests) {
-    try {
-      List<Fact> createdFacts = factRequests.stream()
-              .map(factRequest -> {
-                Long number = factRequest.getNumber();
-                String type = factRequest.getType();
-                String newFact = factRequest.getFact();
-                String author = factRequest.getAuthor();
+public ResponseEntity<String> addBulkFacts(@RequestBody List<FactRequest> factRequests) {
+  try {
+    factRequests.stream()
+            .map(factRequest -> {
+              Long number = factRequest.getNumber();
+              String type = factRequest.getType();
+              String newFact = factRequest.getFact();
+              String author = factRequest.getAuthor();
 
-                if (type == null) {
-                  type = "trivia";
-                }
-                if (author == null) {
-                  author = "UNKNOWN";
-                }
-                validateNumber(number);
-                validateType(type);
-                validateFact(newFact);
-                validateAuthor(author);
+              if (type == null) {
+                type = "trivia";
+              }
+              if (author == null) {
+                author = "UNKNOWN";
+              }
+              validateNumber(number);
+              validateType(type);
+              validateFact(newFact);
+              validateAuthor(author);
 
-                numberService.addNumber(number);
-                Category existingCategory = categoryRepository.findCategoryByName(type);
-                Fact createdFact = factService.createFact(number, newFact);
+              numberService.addNumber(number);
+              Category existingCategory = categoryRepository.findCategoryByName(type);
+              Fact createdFact = factService.createFact(number, newFact);
 
-                FactCategory factCategory = new FactCategory();
-                factCategory.setCategory(existingCategory);
-                factCategory.setFact(createdFact);
-                factCategory.setAuthor(author);
-                factCategoryRepository.save(factCategory);
+              FactCategory factCategory = new FactCategory();
+              factCategory.setCategory(existingCategory);
+              factCategory.setFact(createdFact);
+              factCategory.setAuthor(author);
+              factCategoryRepository.save(factCategory);
 
-                factCategoryService.deleteCache(number.toString() + "_" + type);
+              factCategoryService.deleteCache(number.toString() + "_" + type);
 
-                return createdFact;
-              })
-              .collect(Collectors.toList());
+              return createdFact;
+            })
+            .toList();
 
-      logger.info("Bulk facts added successfully.");
-      return ResponseEntity.ok("Bulk facts added successfully.");
-    } catch (NumberFormatException e) {
-      logger.error("Invalid number/fact format: {}", e.getMessage());
-      return ResponseEntity.badRequest().body("Invalid number/fact format");
-    }
+    logger.info("Bulk facts added successfully.");
+    return ResponseEntity.ok("Bulk facts added successfully.");
+  } catch (NumberFormatException e) {
+    logger.error("Invalid number/fact format: {}", e.getMessage());
+    return ResponseEntity.badRequest().body("Invalid number/fact format");
   }
-
+}
   private void validateNumber(Long number) {
     if (number != null) {
       String numberString = String.valueOf(number);

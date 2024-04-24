@@ -68,7 +68,7 @@ public class FactInfoController {
       throws IllegalAccessException, NoResourceFoundException {
 
     try {
-      logger.info("GET /info called with parameters: number={}, type={}", numberS, type);
+      logger.info("GET /info called.");
       FactCategory factCategory = factCategoryService.getFactByFactAndCategory(numberS, type);
 
       if (factCategory == null) {
@@ -105,7 +105,7 @@ public class FactInfoController {
       throws IllegalAccessException, NoResourceFoundException {
 
     try {
-      logger.info("GET /info/all called with parameters: number={}, type={}", numberS, type);
+      logger.info("GET /info/all called.");
       List<FactCategory> factCategories =
           factCategoryService.getFactsByFactAndCategory(numberS, type);
 
@@ -140,7 +140,7 @@ public class FactInfoController {
       throws IllegalAccessException {
 
     try {
-      logger.info("GET /info/all/number called with parameter: number={}", numberS);
+      logger.info("GET /info/all/number called.");
 
       List<List<FactCategory>> response = new ArrayList<>();
       for (int i = 0; i < 3; i++) {

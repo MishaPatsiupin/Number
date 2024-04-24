@@ -16,6 +16,7 @@ import org.springframework.web.servlet.resource.NoResourceFoundException;
 public class ExceptionHandle {
 
   private static final Logger logger = LoggerFactory.getLogger(ExceptionHandle.class);
+  private String errorMessageBadRequest = "Error 400: Bad Request";
 
   /**
    * Handle illegal argument exception response entity.
@@ -24,8 +25,8 @@ public class ExceptionHandle {
    * @return the response entity
    */
   @ExceptionHandler({IllegalArgumentException.class})
-  public ResponseEntity<Message> MethodNotAllowedException(IllegalArgumentException e) {
-    String errorMessage = "Error 400: Bad Request";
+  public ResponseEntity<Message> methodNotAllowedException(IllegalArgumentException e) {
+    String errorMessage = errorMessageBadRequest;
     logger.error(errorMessage, e);
     return ResponseEntity.status(HttpStatus.BAD_REQUEST)
         .body(new Message(errorMessage, e.getMessage()));
@@ -54,7 +55,7 @@ public class ExceptionHandle {
   @ExceptionHandler({HttpRequestMethodNotSupportedException.class})
   public ResponseEntity<Message> handleMethodNotSupportedException(
       HttpRequestMethodNotSupportedException e) {
-    String errorMessage = "Error 400: Bad Request";
+    String errorMessage = errorMessageBadRequest;
     logger.error(errorMessage, e);
     return ResponseEntity.status(e.getStatusCode()).body(new Message(errorMessage, e.getMessage()));
   }
@@ -81,7 +82,7 @@ public class ExceptionHandle {
   @ExceptionHandler({MissingServletRequestParameterException.class})
   public ResponseEntity<Message> handlerRuntimeException(
       MissingServletRequestParameterException e) {
-    String errorMessage = "Error 400: Bad Request";
+    String errorMessage = errorMessageBadRequest;
     logger.error(errorMessage, e);
     return ResponseEntity.status(400).body(new Message(errorMessage, e.getMessage()));
   }

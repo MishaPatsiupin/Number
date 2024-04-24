@@ -1,7 +1,6 @@
 package com.example.demo.service;
 
 import com.example.demo.entity.Fact;
-import org.springframework.http.ResponseEntity;
 
 /** The interface Fact service. */
 public interface FactService {
