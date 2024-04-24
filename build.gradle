@@ -2,16 +2,11 @@ plugins {
     id 'java'
     id 'org.springframework.boot' version '3.2.3'
     id 'io.spring.dependency-management' version '1.1.4'
-    id "org.sonarqube" version "4.4.1.3373"
     id "jacoco"
+    id "org.sonarqube" version "4.4.1.3373"
+
 }
-sonar {
-    properties {
-        property "sonar.projectKey", "MishaPatsiupin_NumBeer"
-        property "sonar.organization", "bears"
-        property "sonar.host.url", "https://sonarcloud.io"
-    }
-}
+
 jacocoTestReport {
     reports {
         xml.required = true
@@ -21,7 +16,13 @@ jacocoTestReport {
 test {
     jvmArgs "-XX:+EnableDynamicAgentLoading"
 }
-
+sonar {
+    properties {
+        property "sonar.projectKey", "MishaPatsiupin_NumBeer"
+        property "sonar.organization", "bears"
+        property "sonar.host.url", "https://sonarcloud.io"
+    }
+}
 group = 'com.example'
 version = '0.0.1-SNAPSHOT'
 
