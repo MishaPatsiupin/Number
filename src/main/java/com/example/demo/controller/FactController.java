@@ -11,6 +11,7 @@ import com.example.demo.repository.NumberRepository;
 import com.example.demo.service.FactCategoryService;
 import com.example.demo.service.FactService;
 import com.example.demo.service.NumberService;
+import com.example.demo.utils.FactRequest;
 import jakarta.validation.constraints.Digits;
 import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
@@ -20,6 +21,8 @@ import org.springframework.format.annotation.NumberFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import java.util.List;
+
 
 /** The type Fact controller. */
 @Validated
@@ -66,7 +69,7 @@ public class FactController {
    * @return the response entity
    * @throws IllegalAccessException the illegal access exception
    */
-  @PostMapping(value = "/fact/add")
+@PostMapping(value = "/fact/add")
   public ResponseEntity<String> addFact(
       @RequestParam(value = "number")
           @Digits(integer = Integer.MAX_VALUE, fraction = 0, message = "Number must be an integer")
@@ -110,7 +113,7 @@ public class FactController {
    * @return the response entity
    * @throws IllegalAccessException the illegal access exception
    */
-  @DeleteMapping(value = "/fact/delete")
+@DeleteMapping(value = "/fact/delete")
   public ResponseEntity<String> delFact(
       @RequestParam(value = "id")
           @Pattern(regexp = "\\d+")
@@ -169,7 +172,7 @@ public class FactController {
    * @return the response entity
    * @throws IllegalAccessException the illegal access exception
    */
-  @PutMapping(value = "/fact/update")
+@PutMapping(value = "/fact/update")
   public ResponseEntity<String> updFact(
       @RequestParam(value = "id")
           @Digits(integer = Integer.MAX_VALUE, fraction = 0, message = "Number must be an integer")
@@ -230,6 +233,83 @@ public class FactController {
     } catch (Exception e) {
       logger.error("An error occurred while updating the fact: {}", e.getMessage());
       throw new IllegalAccessException("An error occurred while updating the fact.");
+    }
+  }
+
+  /**
+   * Add bulk facts response entity.
+   *
+   * @param factRequests the fact requests
+   * @return the response entity
+   */
+@PostMapping(value = "/fact/add/bulk")
+public ResponseEntity<String> addBulkFacts(@RequestBody List<FactRequest> factRequests) {
+  try {
+    factRequests.stream()
+            .map(factRequest -> {
+              Long number = factRequest.getNumber();
+              String type = factRequest.getType();
+              String newFact = factRequest.getFact();
+              String author = factRequest.getAuthor();
+
+              if (type == null) {
+                type = "trivia";
+              }
+              if (author == null) {
+                author = "UNKNOWN";
+              }
+              validateNumber(number);
+              validateType(type);
+              validateFact(newFact);
+              validateAuthor(author);
+
+              numberService.addNumber(number);
+              Category existingCategory = categoryRepository.findCategoryByName(type);
+              Fact createdFact = factService.createFact(number, newFact);
+
+              FactCategory factCategory = new FactCategory();
+              factCategory.setCategory(existingCategory);
+              factCategory.setFact(createdFact);
+              factCategory.setAuthor(author);
+              factCategoryRepository.save(factCategory);
+
+              factCategoryService.deleteCache(number.toString() + "_" + type);
+
+              return createdFact;
+            })
+            .forEach(fact -> {});
+
+    logger.info("Bulk facts added successfully.");
+    return ResponseEntity.ok("Bulk facts added successfully.");
+  } catch (NumberFormatException e) {
+    logger.error("Invalid number/fact format: {}", e.getMessage());
+    return ResponseEntity.badRequest().body("Invalid number/fact format");
+  }
+}
+  private void validateNumber(Long number) {
+    if (number != null) {
+      String numberString = String.valueOf(number);
+      if (!numberString.matches("\\d+")) {
+        throw new IllegalArgumentException("Number must be an integer");
+      }
+    }
+  }
+
+  private void validateType(String type) {
+    if (type != null && !type.matches("^(year|math|trivia)$")) {
+      throw new IllegalArgumentException("Invalid type");
+    }
+  }
+
+  private void validateFact(String fact) {
+    if (fact != null && !fact.matches("[A-Za-z0-9\\s.,;!?\"'-]+")) {
+      throw new IllegalArgumentException("Invalid fact");
+    }
+  }
+
+  private void validateAuthor(String author) {
+    if (author != null && !author.matches("[A-Za-z0-9\\s.,;!?\"'-]+")) {
+      throw new IllegalArgumentException("Invalid author");
     }
   }
 }

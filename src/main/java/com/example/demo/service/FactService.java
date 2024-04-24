@@ -1,17 +1,9 @@
 package com.example.demo.service;
 
 import com.example.demo.entity.Fact;
-import org.springframework.http.ResponseEntity;
 
 /** The interface Fact service. */
 public interface FactService {
-  /**
-   * Delete fact response entity.
-   *
-   * @param number the number
-   * @return the response entity
-   */
-  public ResponseEntity<String> deleteFact(String number);
 
   /**
    * Create fact fact.

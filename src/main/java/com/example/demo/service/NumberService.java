@@ -3,8 +3,6 @@ package com.example.demo.service;
 import com.example.demo.entity.Numbeer;
 import org.springframework.http.ResponseEntity;
 
-import java.util.List;
-
 /** The interface Number service. */
 public interface NumberService {
   /**
@@ -61,14 +59,4 @@ public interface NumberService {
    * @param id the id
    */
   void deleteNumber(long id);
-
-  /**
-   * Emply number string.
-   *
-   * @param responseS the response s
-   * @param number the number
-   * @param type the type
-   * @return the string
-   */
-  public String emplyNumber(List<String> responseS, long number, String type);
 }

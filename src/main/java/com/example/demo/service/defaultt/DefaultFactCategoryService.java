@@ -30,7 +30,13 @@ public class DefaultFactCategoryService implements FactCategoryService {
   private final SimpleCache simpleCache;
   private final SecureRandom random = new SecureRandom();
 
-  private Category getCategoryEntityById(long catId) {
+  /**
+   * Gets category entity by id.
+   *
+   * @param catId the cat id
+   * @return the category entity by id
+   */
+  public Category getCategoryEntityById(long catId) {
     // Логика получения Category по идентификатору
     Optional<Category> categoryOptional = categoryRepository.findById(catId);
     return categoryOptional.orElse(null);
@@ -38,23 +44,35 @@ public class DefaultFactCategoryService implements FactCategoryService {
 
   public void updateCache(String key, List<FactCategory> newValue) {
     simpleCache.updateCache(key, newValue);
-    logger.info("Cache updated for key: {}", key);
+    logger.info("Cache updated.");
   }
 
   public void deleteCache(String key) {
     if (simpleCache.getFromCache(key) != null) {
       simpleCache.deleteCache(key);
-      logger.info("Cache deleted for key: {}", key);
+      logger.info("Cache deleted.");
     }
   }
 
-  private Fact getFactEntityById(long facId) {
+  /**
+   * Gets fact entity by id.
+   *
+   * @param facId the fac id
+   * @return the fact entity by id
+   */
+  public Fact getFactEntityById(long facId) {
     // Логика получения Fact по идентификатору
     Optional<Fact> factOptional = factRepository.findById(facId);
     return factOptional.orElse(null);
   }
 
-  private FactCategory getFactCategoryEntityById(long id) {
+  /**
+   * Gets fact category entity by id.
+   *
+   * @param id the id
+   * @return the fact category entity by id
+   */
+  public FactCategory getFactCategoryEntityById(long id) {
     // Логика получения FactCategory по идентификатору
     Optional<FactCategory> factCategoryOptional = factCategoryRepository.findById(id);
     return factCategoryOptional.orElse(null);
@@ -97,7 +115,7 @@ public class DefaultFactCategoryService implements FactCategoryService {
   @Override
   public void deleteFactCategory(long id) {
     factCategoryRepository.deleteById(id);
-    logger.info("FactCategory deleted with id: {}", id);
+    logger.info("FactCategory deleted.");
   }
 
   @Override
@@ -110,9 +128,9 @@ public class DefaultFactCategoryService implements FactCategoryService {
       factCategoryEntity.setFact(factEntity);
       factCategoryEntity.setAuthor(author);
       factCategoryRepository.save(factCategoryEntity);
-      logger.info("FactCategory updated with id: {}", id);
+      logger.info("FactCategory updated.");
     } else {
-      logger.warn("FactCategory not found with id: {}", id);
+      logger.warn("FactCategory not found.");
     }
   }
 
@@ -137,9 +155,9 @@ public class DefaultFactCategoryService implements FactCategoryService {
       allFactByNumber =
           factCategoryRepository.findFactCategoriesByNumberDataAndCategoryName(number, type);
       simpleCache.addToCache(key, allFactByNumber);
-      logger.info("Data loaded from repository and added to cache. Key: {}", key);
+      logger.info("Data loaded from repository and added to cache.");
     } else {
-      logger.info("Data loaded from cache. Key: {}", key);
+      logger.info("Data loaded from cache.");
     }
 
     return allFactByNumber;
