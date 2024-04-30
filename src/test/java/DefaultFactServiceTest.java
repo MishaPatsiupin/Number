@@ -19,6 +19,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.ArgumentMatchers.any;
 
+/** The type Default fact service test. */
 public class DefaultFactServiceTest {
 
   @Mock private FactRepository factRepository;
@@ -27,11 +28,13 @@ public class DefaultFactServiceTest {
 
   @InjectMocks private DefaultFactService defaultFactService;
 
+  /** Sets up. */
   @BeforeEach
   void setUp() {
     MockitoAnnotations.openMocks(this);
   }
 
+  /** Test find fact. */
   @Test
   void testFindFact() {
     // Arrange
@@ -48,6 +51,7 @@ public class DefaultFactServiceTest {
     assertEquals(description, result.getDescription());
   }
 
+  /** Test get fact by number id. */
   @Test
   void testGetFactByNumberId() {
     // Arrange
@@ -67,6 +71,7 @@ public class DefaultFactServiceTest {
     assertEquals(number, result.getNumber().getNumberData());
   }
 
+  /** Test create fact. */
   @Test
   void testCreateFact() {
     // Arrange

@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -148,8 +149,11 @@ public class FactInfoController {
             factCategoryService.getFactsByFactAndCategory(
                 numberS, DefaultNumberService.Type.values()[i].name().toLowerCase()));
       }
+      List<List<FactCategory>> filteredResponse = response.stream()
+              .filter(list -> !list.isEmpty())
+              .collect(Collectors.toList());
 
-      return new ResponseEntity<>(response, HttpStatus.OK);
+      return new ResponseEntity<>(filteredResponse, HttpStatus.OK);
     } catch (Exception e) {
       String errorMessage = ERROR_MESSEGE_1 + e.getMessage();
       logger.error(errorMessage);
