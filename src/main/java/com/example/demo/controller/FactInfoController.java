@@ -4,6 +4,7 @@ import com.example.demo.entity.FactCategory;
 import com.example.demo.repository.CategoryRepository;
 
 import com.example.demo.repository.NumberRepository;
+import com.example.demo.service.CounterService;
 import com.example.demo.service.FactCategoryService;
 import com.example.demo.service.FactService;
 import com.example.demo.service.NumberService;
@@ -29,6 +30,7 @@ import org.springframework.web.servlet.resource.NoResourceFoundException;
 @RestController
 @AllArgsConstructor
 public class FactInfoController {
+  private final CounterService counterService;
 
   /** The Number service. */
   NumberService numberService;
@@ -70,6 +72,7 @@ public class FactInfoController {
 
     try {
       logger.info("GET /info called.");
+
       FactCategory factCategory = factCategoryService.getFactByFactAndCategory(numberS, type);
 
       if (factCategory == null) {
@@ -107,6 +110,7 @@ public class FactInfoController {
 
     try {
       logger.info("GET /info/all called.");
+
       List<FactCategory> factCategories =
           factCategoryService.getFactsByFactAndCategory(numberS, type);
 
