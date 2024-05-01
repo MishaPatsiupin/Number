@@ -30,7 +30,6 @@ import org.springframework.web.servlet.resource.NoResourceFoundException;
 @RestController
 @AllArgsConstructor
 public class FactInfoController {
-  private final CounterService counterService;
 
   /** The Number service. */
   NumberService numberService;
