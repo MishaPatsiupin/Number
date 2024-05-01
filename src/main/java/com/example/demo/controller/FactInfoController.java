@@ -4,7 +4,6 @@ import com.example.demo.entity.FactCategory;
 import com.example.demo.repository.CategoryRepository;
 
 import com.example.demo.repository.NumberRepository;
-import com.example.demo.service.CounterService;
 import com.example.demo.service.FactCategoryService;
 import com.example.demo.service.FactService;
 import com.example.demo.service.NumberService;
