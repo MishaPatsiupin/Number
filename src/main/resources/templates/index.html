@@ -6,7 +6,7 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #e29292;
+            background-color: #c0b2b2;
         }
         .container {
             width: 80%;
@@ -32,6 +32,8 @@
     </style>
     <script>
         window.onload = function() {
+            var currentFactId = null;
+
             document.getElementById('searchButton').addEventListener('click', function () {
                 var number = document.getElementById('searchNumber').value;
                 var type = document.getElementById('type').value;
@@ -43,15 +45,25 @@
                         return response.json();
                     })
                     .then(data => {
-                        // Преобразование объекта data в читаемую строку
-                        var readableString = `ID: ${data.fact.id}\nCategory: ${data.category.name}\nNumber: ${data.fact.number.numberData}\nFact: ${data.fact.description}\nAuthor: ${data.author}`;
+                        currentFactId = data.fact.id;
+                        var readableString = `Category: ${data.category.name}\nNumber: ${data.fact.number.numberData}\nFact: ${data.fact.description}\nAuthor: ${data.author}`;
                         document.getElementById('searchResult').innerText = readableString;
                     })
                     .catch(error => {
-                        // Если сервер не вернул данные или вернул ошибку
                         document.getElementById('searchResult').innerText = "This is a boring number.";
+                        currentFactId = null;
+                        deleteButton.disabled = true; // Disable the delete button
                     });
             });
+
+            document.getElementById('deleteButton').addEventListener('click', function() {
+                if (currentFactId) {
+                    fetch(`http://localhost:8080/fact/delete?id=${currentFactId}`, {
+                        method: 'DELETE'
+                    });
+                }
+            });
+
             document.getElementById('addButton').addEventListener('click', function() {
                 var number = document.getElementById('addNumber').value;
                 var description = document.getElementById('description').value;
@@ -61,27 +73,21 @@
                     method: 'POST'
                 });
             });
-
-            document.getElementById('deleteButton').addEventListener('click', function() {
-                var id = document.getElementById('deleteNumber').value;
-                fetch(`http://localhost:8080/fact/delete?id=${id}`, {
-                    method: 'DELETE'
-                });
-            });
         };
     </script>
 </head>
 <body>
 <div class="container">
     <div id="search">
-        <h2>Search</h2>
+        <h2>Fact info/delete</h2>
         <input type="number" id="searchNumber" placeholder="Enter a number">
         <select id="type">
             <option value="trivia">Trivia</option>
             <option value="math">Math</option>
             <option value="year">Year</option>
         </select>
-        <button id=searchButton>Search</button>
+        <button id="searchButton">Search</button>
+        <button id="deleteButton">Delete</button>
         <p id="searchResult"></p>
     </div>
     <div id="add">
@@ -95,11 +101,6 @@
             <option value="year">Year</option>
         </select>
         <button id="addButton">Add</button>
-    </div>
-    <div id="delete">
-        <h2>Delete</h2>
-        <input type="number" id="deleteNumber" placeholder="Enter a id fact">
-        <button id="deleteButton">Delete</button>
     </div>
 </div>
 </body>
