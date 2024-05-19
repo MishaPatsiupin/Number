@@ -1,33 +1,25 @@
 version: '3.9'
-
 services:
-  text_db:
+  db_postgres:
     image: postgres
-    container_name: db_java
+    container_name: db_postgres
     restart: always
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: 1112
       POSTGRES_DB: numbeer
     ports:
-      - '5432:5432'
-    networks:
-      - text-network
-
-  app:
-    image: demo1
+      - "5432:5432"
+    volumes:
+      - ./backup.sql:/docker-entrypoint-initdb.d/backup.sql
+  myapp:
+    build: .
+    container_name: Numbeer
     ports:
       - "8080:8080"
+    depends_on:
+      - db_postgres
     environment:
+      DB_URL: jdbc:postgresql://db_postgres:5432/numbeer
       DB_USER: postgres
       DB_PASSWORD: 1112
-      DB_NAME: db
-      DB_HOST: db:5432
-    depends_on:
-      - text_db
-    networks:
-      - text-network
-
-networks:
-  text-network:
-    driver: bridge
