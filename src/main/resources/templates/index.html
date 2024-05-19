@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Number Fact Service</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #c0b2b2;
+        }
+        .container {
+            width: 80%;
+            margin: auto;
+            overflow: hidden;
+        }
+        #search, #add, #delete {
+            border: 1px solid black;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 15px 32px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 4px 2px;
+            cursor: pointer;
+        }
+    </style>
+    <script>
+        window.onload = function() {
+            var currentFactId = null;
+
+            document.getElementById('searchButton').addEventListener('click', function () {
+                var number = document.getElementById('searchNumber').value;
+                var type = document.getElementById('type').value;
+                fetch(`http://localhost:8080/info?number=${number}&type=${type}`)
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Server response was not ok');
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        currentFactId = data.fact.id;
+                        var readableString = `Category: ${data.category.name}\nNumber: ${data.fact.number.numberData}\nFact: ${data.fact.description}\nAuthor: ${data.author}`;
+                        document.getElementById('searchResult').innerText = readableString;
+                    })
+                    .catch(error => {
+                        document.getElementById('searchResult').innerText = "This is a boring number.";
+                        currentFactId = null;
+                        deleteButton.disabled = true; // Disable the delete button
+                    });
+            });
+
+            document.getElementById('deleteButton').addEventListener('click', function() {
+                if (currentFactId) {
+                    fetch(`http://localhost:8080/fact/delete?id=${currentFactId}`, {
+                        method: 'DELETE'
+                    });
+                }
+            });
+
+            document.getElementById('addButton').addEventListener('click', function() {
+                var number = document.getElementById('addNumber').value;
+                var description = document.getElementById('description').value;
+                var author = document.getElementById('author').value;
+                var type = document.getElementById('addType').value;
+                fetch(`http://localhost:8080/fact/add?number=${number}&fact=${description}&type=${type}&author=${author}`, {
+                    method: 'POST'
+                });
+            });
+        };
+    </script>
+</head>
+<body>
+<div class="container">
+    <div id="search">
+        <h2>Fact info/delete</h2>
+        <input type="number" id="searchNumber" placeholder="Enter a number">
+        <select id="type">
+            <option value="trivia">Trivia</option>
+            <option value="math">Math</option>
+            <option value="year">Year</option>
+        </select>
+        <button id="searchButton">Search</button>
+        <button id="deleteButton">Delete</button>
+        <p id="searchResult"></p>
+    </div>
+    <div id="add">
+        <h2>Add</h2>
+        <input type="number" id="addNumber" placeholder="Enter a number">
+        <input type="text" id="description" placeholder="Enter a description">
+        <input type="text" id="author" placeholder="Enter author's name">
+        <select id="addType">
+            <option value="trivia">Trivia</option>
+            <option value="math">Math</option>
+            <option value="year">Year</option>
+        </select>
+        <button id="addButton">Add</button>
+    </div>
+</div>
+</body>
+</html>
