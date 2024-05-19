@@ -16,6 +16,31 @@ The parameters are as follows:
   - An integer: Simply enter the desired integer value to obtain information about that number.
   - The keyword `random`: If you use the keyword `random`, the API will attempt to provide a random available fact.
 
+#### Other Endpoints
+
+- Create a new fact about the `NUMBER` 42:
+
+  - `TYPE`: trivia
+  - `FACT`: "42 is the answer to the Ultimate Question of Life, the Universe, and Everything."
+  - `AUTHOR`: Deep Thought
+  - Send a POST request to 'http://localhost:8080/fact/add' with the above parameters.
+
+- Update the fact with ID 123:
+
+  - Change the `NUMBER` to 100
+  - `TYPE`: math
+  - `FACT`: "100 is a square number."
+  - `AUTHOR`: MathFanatic
+  - Send a PUT request to 'http://localhost:8080/fact/update' with the updated parameters.
+
+- Delete the fact with ID 456.
+
+  - Send a DELETE request to 'http://localhost:8080/fact/delete' with the ID parameter set to 456.
+
+- Get information about a all fact related to the number 25 in the math category.
+
+  - Access 'http://localhost:8080/info/all?number=25&type=math' for the result.
+
 ### Examples
 
 Here are a few examples to demonstrate how to use the NumbersAPI:
