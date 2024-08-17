@@ -153,7 +153,7 @@ public class FactInfoController {
       }
       List<List<FactCategory>> filteredResponse = response.stream()
               .filter(list -> !list.isEmpty())
-              .collect(Collectors.toList());
+              .collect(Stream.toList());
 
       return new ResponseEntity<>(filteredResponse, HttpStatus.OK);
     } catch (Exception e) {
